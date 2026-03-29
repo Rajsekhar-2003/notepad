@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="theme-color" content="#667eea">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="OmeBox Notepad">
+    
+    <title>OmeBox Notepad - Free Online Notepad No Login Required | Best Text Editor 2026 | Simple Text Editor</title>
+    
+    <!-- META DESCRIPTION (150-160 characters) -->
+    <meta name="description" content="omebox Notepad online notepad no login required. Write notes, edit text, format with bold/italic, and share instantly. Best Notepad++ alternative with auto-save, download PDF/Word, and real-time sharing. No signup needed. Perfect for quick notes, code snippets, and document editing. Simple Text Editor">
+    
+    <!-- META KEYWORDS - Expanded for better SEO -->
+    <meta name="keywords" content="online notepad, notepad no login, free notepad, text editor online, notepad without login, share text online, no signup notepad, notepad++ online, write notes online, rich text editor, text sharing, free text editor, online notepad no registration, quick notes, code snippet editor, document editor, markdown editor, html editor, word counter, character counter, free online text editor, browser notepad, instant notepad, private notepad, secure text editor, online word processor, digital notebook, writing tool, note taking app, collaborative editor, text formatting tool, pdf converter, word converter, omeBox notepad, best notepad alternative, online text editor free, no login text editor, Free online notepad with no login required. Write, edit, and save notes instantly. Fast, secure, and easy-to-use text editor with autosave and export features.">
+    
+    <!-- ROBOTS -->
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <meta name="googlebot" content="index, follow">
+    <meta name="bingbot" content="index, follow">
+    <meta name="yandex" content="index, follow">
+    
+    <!-- CANONICAL -->
+    <link rel="canonical" href="https://notepad.omebox.com">
+    
+    <!-- OPEN GRAPH / FACEBOOK - Enhanced -->
+    <meta property="og:title" content="OmeBox Notepad - Free Online Notepad No Login Required | Best Text Editor">
+    <meta property="og:description" content="Write and share notes instantly. No login, no signup. Best Notepad++ alternative with rich text formatting, auto-save, and PDF/Word download. Free online text editor.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://notepad.omebox.com">
+    <meta property="og:image" content="https://omebox.com/static/og-notepad.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="OmeBox Notepad - Free Online Text Editor Interface">
+    <meta property="og:site_name" content="OmeBox Notepad">
+    <meta property="og:locale" content="en_US">
+    
+    <!-- TWITTER CARD - Enhanced -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="OmeBox Notepad - Free Online Notepad No Login">
+    <meta name="twitter:description" content="Best free online notepad. No registration needed. Write, format, and share text instantly. Download as PDF, Word, HTML, or TXT.">
+    <meta name="twitter:image" content="https://omebox.com/static/twitter-notepad.jpg">
+    <meta name="twitter:image:alt" content="OmeBox Notepad editor interface showing formatting tools and text area">
+    <meta name="twitter:site" content="@omebox">
+    <meta name="twitter:creator" content="@omebox">
+    
+    <!-- AUTHOR & PUBLISHER -->
+    <meta name="author" content="OmeBox">
+    <meta name="publisher" content="OmeBox">
+    <meta name="copyright" content="© 2026 OmeBox">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="static/image.png">
+    <link rel="apple-touch-icon" href="static/image.png"">
+    <link rel="shortcut icon" href="static/image.png"">
+    
+    <!-- Sitemap -->
+    <link rel="sitemap" type="application/xml" href="https://omebox.com/sitemap.xml">
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- html2pdf for PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- FileSaver.js for saving files -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <link rel="stylesheet" href="static/style.css">
+    
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Online Notepad",
+        "description": "Free browser-based text editor with autosave functionality",
+        "applicationCategory": "ProductivityApplication",
+        "operatingSystem": "Web Browser",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        }
+    }
+    </script>
+</head>
+<body>
+
+<!-- Skip to main content link for keyboard users -->
+<a href="#main-content" class="skip-to-content">Skip to main content</a>
+
+<!-- Live region for screen reader announcements -->
+<div class="live-region" aria-live="polite" aria-atomic="true" id="liveRegion"></div>
+
+<div class="editor-container">
+    <!-- Main Toolbar with ARIA role -->
+    <div class="toolbar" role="toolbar" aria-label="Text formatting toolbar">
+        <!-- Text Formatting -->
+        <div class="tool-group" role="group" aria-label="Text formatting options">
+            <button class="tool-btn" onclick="formatText('bold')" aria-label="Bold text (Ctrl+B)" title="Bold (Ctrl+B)">
+                <i class="fas fa-bold" aria-hidden="true"></i> <span>Bold</span>
+            </button>
+            <button class="tool-btn" onclick="formatText('italic')" aria-label="Italic text (Ctrl+I)" title="Italic (Ctrl+I)">
+                <i class="fas fa-italic" aria-hidden="true"></i> <span>Italic</span>
+            </button>
+            <button class="tool-btn" onclick="formatText('underline')" aria-label="Underline text (Ctrl+U)" title="Underline (Ctrl+U)">
+                <i class="fas fa-underline" aria-hidden="true"></i> <span>Underline</span>
+            </button>
+            <button class="tool-btn" onclick="formatText('strikeThrough')" aria-label="Strikethrough text" title="Strikethrough">
+                <i class="fas fa-strikethrough" aria-hidden="true"></i> <span>Strike</span>
+            </button>
+        </div>
+
+        <!-- Font Controls -->
+        <div class="tool-group" role="group" aria-label="Font controls">
+            <label for="fontFamily" class="sr-only">Font family</label>
+            <select class="tool-select" id="fontFamily" onchange="changeFontFamily()" aria-label="Select font family">
+                <option value="Inter">Inter</option>
+                <option value="Arial">Arial</option>
+                <option value="Times New Roman">Times New Roman</option>
+                <option value="Courier New">Courier New</option>
+                <option value="Georgia">Georgia</option>
+                <option value="Verdana">Verdana</option>
+            </select>
+            
+            <label for="fontSize" class="sr-only">Font size</label>
+            <select class="tool-select" id="fontSize" onchange="changeFontSize()" aria-label="Select font size">
+                <option value="12px">12px</option>
+                <option value="14px">14px</option>
+                <option value="16px" selected>16px</option>
+                <option value="18px">18px</option>
+                <option value="20px">20px</option>
+                <option value="24px">24px</option>
+                <option value="28px">28px</option>
+                <option value="32px">32px</option>
+            </select>
+        </div>
+
+        <!-- Text Alignment -->
+        <div class="tool-group" role="group" aria-label="Text alignment">
+            <button class="tool-btn" onclick="formatText('justifyLeft')" aria-label="Align left">
+                <i class="fas fa-align-left" aria-hidden="true"></i>
+            </button>
+            <button class="tool-btn" onclick="formatText('justifyCenter')" aria-label="Align center">
+                <i class="fas fa-align-center" aria-hidden="true"></i>
+            </button>
+            <button class="tool-btn" onclick="formatText('justifyRight')" aria-label="Align right">
+                <i class="fas fa-align-right" aria-hidden="true"></i>
+            </button>
+            <button class="tool-btn" onclick="formatText('justifyFull')" aria-label="Justify text">
+                <i class="fas fa-align-justify" aria-hidden="true"></i>
+            </button>
+        </div>
+
+        <!-- Colors -->
+        <div class="tool-group" role="group" aria-label="Color options">
+            <label for="textColor" class="sr-only">Text color</label>
+            <input type="color" class="color-picker" id="textColor" onchange="changeTextColor()" value="#000000" aria-label="Text color picker" title="Text Color">
+            <label for="bgColor" class="sr-only">Background color</label>
+            <input type="color" class="color-picker" id="bgColor" onchange="changeBgColor()" value="#ffffff" aria-label="Background color picker" title="Background Color">
+        </div>
+
+        <!-- Lists -->
+        <div class="tool-group" role="group" aria-label="List options">
+            <button class="tool-btn" onclick="formatText('insertUnorderedList')" aria-label="Insert bulleted list">
+                <i class="fas fa-list-ul" aria-hidden="true"></i>
+            </button>
+            <button class="tool-btn" onclick="formatText('insertOrderedList')" aria-label="Insert numbered list">
+                <i class="fas fa-list-ol" aria-hidden="true"></i>
+            </button>
+        </div>
+
+        <!-- Insert -->
+        <div class="tool-group" role="group" aria-label="Insert elements">
+            <button class="tool-btn" onclick="insertLink()" aria-label="Insert hyperlink">
+                <i class="fas fa-link" aria-hidden="true"></i>
+            </button>
+            <button class="tool-btn" onclick="insertImage()" aria-label="Insert image">
+                <i class="fas fa-image" aria-hidden="true"></i>
+            </button>
+            <button class="tool-btn" onclick="insertTable()" aria-label="Insert table">
+                <i class="fas fa-table" aria-hidden="true"></i>
+            </button>
+            <button class="tool-btn" onclick="insertHorizontalRule()" aria-label="Insert horizontal line">
+                <i class="fas fa-minus" aria-hidden="true"></i>
+            </button>
+        </div>
+
+        <!-- Undo/Redo -->
+        <div class="tool-group" role="group" aria-label="Undo and redo">
+            <button class="tool-btn" onclick="document.execCommand('undo')" aria-label="Undo (Ctrl+Z)" title="Undo (Ctrl+Z)">
+                <i class="fas fa-undo" aria-hidden="true"></i>
+            </button>
+            <button class="tool-btn" onclick="document.execCommand('redo')" aria-label="Redo (Ctrl+Y)" title="Redo (Ctrl+Y)">
+                <i class="fas fa-redo" aria-hidden="true"></i>
+            </button>
+        </div>
+
+        <!-- File Operations -->
+        <div class="tool-group" role="group" aria-label="File operations">
+            <button class="tool-btn" onclick="saveToLocal()" aria-label="Save draft (Ctrl+S)" title="Save (Ctrl+S)">
+                <i class="fas fa-save" aria-hidden="true"></i> <span>Save</span>
+            </button>
+            <button class="tool-btn" onclick="printDocument()" aria-label="Print document" title="Print">
+                <i class="fas fa-print" aria-hidden="true"></i>
+            </button>
+            <button class="tool-btn" onclick="clearEditor()" aria-label="Clear all content" title="Clear All">
+                <i class="fas fa-trash-alt" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Editor Area with landmark role -->
+    <div class="editor-area">
+        <!-- Rich Text Editor - main content area -->
+        <main id="main-content" class="rich-editor" role="main">
+            <div id="editor" contenteditable="true" role="textbox" aria-label="Text editor. Start typing your notes here" aria-multiline="true"></div>
+        </main>
+
+        <!-- Sidebar with complementary role -->
+        <aside class="sidebar" role="complementary" aria-label="Document tools and saved notes">
+            <!-- Download Options Section -->
+            <section aria-labelledby="download-heading">
+                <h6 id="download-heading" class="fw-bold mb-3">
+                    <i class="fas fa-download text-primary me-2" aria-hidden="true"></i>Export Document
+                </h6>
+                <div class="download-options">
+                    <button class="btn btn-success download-btn" onclick="downloadAsPDF()" aria-label="Download as PDF file">
+                        <i class="fas fa-file-pdf" aria-hidden="true"></i> PDF
+                    </button>
+                    <button class="btn btn-primary download-btn" onclick="downloadAsWord()" aria-label="Download as Word document">
+                        <i class="fas fa-file-word" aria-hidden="true"></i> Word
+                    </button>
+                    <button class="btn btn-info download-btn" onclick="downloadAsHTML()" aria-label="Download as HTML file">
+                        <i class="fas fa-code" aria-hidden="true"></i> HTML
+                    </button>
+                    <button class="btn btn-secondary download-btn" onclick="downloadAsTXT()" aria-label="Download as plain text file">
+                        <i class="fas fa-file-alt" aria-hidden="true"></i> TXT
+                    </button>
+                    <button class="btn btn-warning download-btn" onclick="downloadAsMarkdown()" aria-label="Download as Markdown file">
+                        <i class="fas fa-markdown" aria-hidden="true"></i> MD
+                    </button>
+                    <button class="btn btn-dark download-btn" onclick="downloadAsJSON()" aria-label="Download as JSON file">
+                        <i class="fas fa-database" aria-hidden="true"></i> JSON
+                    </button>
+                </div>
+                <div class="mt-2 small text-muted text-center">
+                    <i class="fas fa-info-circle" aria-hidden="true"></i> Click any format to download
+                </div>
+            </section>
+
+            <!-- Quick Actions -->
+            <section aria-labelledby="quick-actions-heading">
+                <h6 id="quick-actions-heading" class="fw-bold mb-3">
+                    <i class="fas fa-bolt text-primary me-2" aria-hidden="true"></i>Quick Actions
+                </h6>
+                <div class="d-grid gap-2">
+                    <button class="btn btn-outline-primary btn-sm" onclick="copyAllText()" aria-label="Copy all text to clipboard">
+                        <i class="fas fa-copy" aria-hidden="true"></i> Copy All Text
+                    </button>
+                    <button class="btn btn-outline-secondary btn-sm" onclick="selectAllText()" aria-label="Select all text">
+                        <i class="fas fa-check-double" aria-hidden="true"></i> Select All
+                    </button>
+                </div>
+            </section>
+
+            <!-- Statistics -->
+            <section class="stats-card" aria-labelledby="stats-heading">
+                <h6 id="stats-heading" class="fw-bold mb-3">
+                    <i class="fas fa-chart-line text-primary me-2" aria-hidden="true"></i>Document Stats
+                </h6>
+                <div class="row g-2">
+                    <div class="col-6">
+                        <div class="stat-value" id="charCount" aria-label="Character count">0</div>
+                        <div class="stat-label">Characters</div>
+                    </div>
+                    <div class="col-6">
+                        <div class="stat-value" id="wordCount" aria-label="Word count">0</div>
+                        <div class="stat-label">Words</div>
+                    </div>
+                    <div class="col-6">
+                        <div class="stat-value" id="lineCount" aria-label="Line count">0</div>
+                        <div class="stat-label">Lines</div>
+                    </div>
+                    <div class="col-6">
+                        <div class="stat-value" id="paragraphCount" aria-label="Paragraph count">0</div>
+                        <div class="stat-label">Paragraphs</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Saved Notes -->
+            <section aria-labelledby="saved-notes-heading">
+                <h6 id="saved-notes-heading" class="fw-bold mb-3">
+                    <i class="fas fa-folder-open text-primary me-2" aria-hidden="true"></i>Saved Notes
+                </h6>
+                <div class="file-list" id="fileList" role="list" aria-label="List of saved notes"></div>
+            </section>
+
+            <!-- Save New Note -->
+            <section aria-labelledby="save-note-heading">
+                <h6 id="save-note-heading" class="fw-bold mb-3">
+                    <i class="fas fa-plus-circle text-primary me-2" aria-hidden="true"></i>Save New Note
+                </h6>
+                <div class="d-grid gap-2">
+                    <label for="noteName" class="sr-only">Note name</label>
+                    <input type="text" class="form-control form-control-sm" id="noteName" placeholder="Enter note name..." aria-label="Note name input">
+                    <button class="btn btn-primary btn-sm" onclick="saveAsNewNote()" aria-label="Save current content as new note">
+                        <i class="fas fa-save" aria-hidden="true"></i> Save as New Note
+                    </button>
+                </div>
+            </section>
+
+            <!-- Tips -->
+            <div class="alert alert-info alert-sm" role="alert">
+                <i class="fas fa-keyboard" aria-hidden="true"></i>
+                <strong>Pro Tips:</strong><br>
+                <small>• Ctrl+B/I/U for formatting</small><br>
+                <small>• Ctrl+S to save draft</small><br>
+                <small>• Multiple export formats available</small>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Status Bar -->
+    <footer class="status-bar" role="contentinfo">
+        <span id="statusMsg" aria-live="polite">
+            <i class="fas fa-check-circle text-success" aria-hidden="true"></i> Ready
+        </span>
+        <span>
+            <i class="fas fa-save" aria-hidden="true"></i> <span id="lastSaved">Not saved</span>
+        </span>
+    </footer>
+</div>
+<!-- SEO Optimized Content Section -->
+<div class="container py-5">
+    <!-- Hero Section -->
+    <div class="row justify-content-center mb-5">
+        <div class="col-lg-10 col-xl-8 text-center">
+            <h1 class="display-4 fw-bold text-primary mb-4">
+                <i class="fas fa-edit me-3"></i>Free Online Notepad - No Login Required | Notepad++
+            </h1>
+            <p class="lead fs-4 text-muted mb-4">
+                Autosave every second • Create, edit, share notes instantly • Best free web notepad like Notepad++
+            </p>
+        </div>
+    </div>
+
+    <!-- Main Description -->
+    <div class="row justify-content-center mb-5">
+        <div class="col-lg-10">
+            <div class="card border-0 shadow-lg">
+                <div class="card-body p-5">
+                    <p class="lead mb-4">
+                        <strong>Online Notepad</strong> is a free browser-based text editor. 
+                        No registration required. Perfect for quick notes with <strong>autosave every second</strong>.
+                    </p>
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <h5><i class="fas fa-check-circle text-success me-2"></i>Key Features</h5>
+                            <ul class="list-unstyled ps-4">
+                                <li class="mb-2">✓ Undo/Redo, Copy/Cut/Paste</li>
+                                <li class="mb-2">✓ Find & Replace, Spell Checker</li>
+                                <li class="mb-2">✓ Word Counter, Font Formatting</li>
+                                <li class="mb-2">✓ Download, Print, Share</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5><i class="fas fa-globe text-info me-2"></i>Works On</h5>
+                            <ul class="list-unstyled ps-4">
+                                <li class="mb-2">✓ Chrome, Firefox, Safari, Edge</li>
+                                <li class="mb-2">✓ Opera, IE, All modern browsers</li>
+                                <li class="mb-2">✓ JavaScript enabled</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Privacy Section -->
+    <div class="row justify-content-center mb-5">
+        <div class="col-lg-10">
+            <div class="card border-0 bg-primary text-white shadow-lg">
+                <div class="card-body p-5 text-center">
+                    <i class="fas fa-shield-alt fa-3x mb-4"></i>
+                    <h3 class="fw-bold mb-4">Best Free Text Editor for Notes, Code & Documents</h3>
+                    <p class="lead mb-0">
+                        All data stored locally in browser. <strong>No servers, no tracking</strong>. 
+                        Perfect for sensitive notes.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Section -->
+    <div class="row justify-content-center">
+        <div class="col-lg-8 text-center">
+            <h3 class="fw-bold text-dark mb-4">About</h3>
+            <p class="text-muted lead">
+                Free product for everyone. Originally made to boost personal productivity. 
+                Hope it helps you too! ✨
+                online notepad, free online notepad, notepad without login, no login notepad, best online text editor, free text editor online, <br>
+                 notepad++ online alternative, simple text editor, browser notepad, instant notepad, secure notepad online, private text editor, <br> 
+                 write notes online, code editor online, word editor online, rich text editor, markdown editor online, html editor online, <br>
+                 note taking app online, digital notebook, quick notes tool, autosave notepad, free writing tool, online wordpad, text sharing tool, <br>
+                 lightweight text editor, fast online editor, no signup text editor, free document editor, minimal text editor</h2>
+            </div>
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- SEO Footer Section -->
+<footer class="bg-dark text-white py-5 mt-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <h5 class="fw-bold mb-3">
+                    <i class="fas fa-edit me-2 text-primary"></i>Online Notepad
+                </h5>
+                <p class="text-muted small">
+                    Free browser notepad with autosave. No login, no tracking. 
+                    Best web alternative to Notepad++.
+                </p>
+            </div>
+            <div class="col-lg-4">
+                <h6 class="fw-bold mb-3">Features</h6>
+                <ul class="list-unstyled small">
+                    <li><i class="fas fa-check text-success me-1"></i>Autosave every second</li>
+                    <li><i class="fas fa-lock text-success me-1"></i>Local storage only</li>
+                    <li><i class="fas fa-download text-success me-1"></i>Export & Print</li>
+                    <li><i class="fas fa-share text-success me-1"></i>Easy sharing</li>
+                </ul>
+            </div>
+            <div class="col-lg-4">
+                <h6 class="fw-bold mb-3">Supported Browsers</h6>
+                <ul class="list-unstyled small">
+                    <li><i class="fab fa-chrome me-1"></i>Chrome</li>
+                    <li><i class="fab fa-firefox me-1"></i>Firefox</li>
+                    <li><i class="fab fa-safari me-1"></i>Safari</li>
+                    <li><i class="fab fa-edge me-1"></i>Edge</li>
+                </ul>
+            </div>
+        </div>
+        <hr class="my-4 opacity-25">
+        <div class="row align-items-center">
+            <div class="col-md-6 small text-muted">
+                © 2026 Online Notepad. Free to use. Privacy-focused.
+            </div>
+            <div class="col-md-6 text-md-end small">
+                <a href="https://omebox.com/privacy-policy class="text-white text-decoration-none me-3">Privacy</a>
+                <a href="https://omebox.com/about" class="text-white text-decoration-none">About</a>
+                
+        </div>
+    </div>
+</footer>
+
+<style>
+.hover-shadow:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,0,0,0.1) !important; }
+</style>
+<!-- Toast Notifications with ARIA live region -->
+<div class="toast-notification" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+<script src="static/script.js"></script>
+
+</body>
+</html>
