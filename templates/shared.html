@@ -12,8 +12,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- html2pdf library for PDF generation -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <style>
         * {
             margin: 0;
@@ -269,6 +267,22 @@
             to { transform: rotate(360deg); }
         }
 
+        /* PDF Export Styles - Hidden but used for PDF generation */
+        .pdf-export-container {
+            position: fixed;
+            top: -9999px;
+            left: -9999px;
+            width: 800px;
+            background: white;
+            padding: 40px;
+            font-family: Arial, sans-serif;
+            z-index: -1;
+        }
+        
+        .pdf-export-container * {
+            visibility: visible;
+        }
+
         @media (max-width: 768px) {
             .shared-card {
                 padding: 20px;
@@ -366,9 +380,9 @@
                     <button class="copy-btn" id="copyContentBtn" style="background:#17a2b8;">
                         <i class="bi bi-clipboard-check"></i> Copy Content (Formatted)
                     </button>
-                    <!--<button class="download-btn" id="downloadPDFBtn" style="background:#dc3545;">
+                    <button class="download-btn" id="downloadPDFBtn" style="background:#dc3545;">
                         <i class="bi bi-file-pdf"></i> Download PDF
-                    </button>-->
+                    </button>
                     <button class="download-btn" id="downloadTxtBtn" style="background:#6c757d;">
                         <i class="bi bi-file-text"></i> Download TXT
                     </button>
@@ -472,12 +486,6 @@
             }
             
             return contentText;
-        }
-        
-        // Get HTML content for PDF
-        function getHTMLContent() {
-            const noteContentDiv = document.getElementById('noteContent');
-            return noteContentDiv.innerHTML;
         }
         
         // Count lines in content
@@ -594,74 +602,221 @@
             }
         });
         
-        // Download as PDF
-        document.getElementById('downloadPDFBtn').addEventListener('click', async () => {
+        // SIMPLE WORKING PDF DOWNLOAD - Using browser print
+        function downloadPDF() {
+            const button = document.getElementById('downloadPDFBtn');
+            const originalHTML = button.innerHTML;
+            button.innerHTML = '<span class="loading-spinner"></span> Preparing PDF...';
+            button.disabled = true;
+            
+            try {
+                // Get the note content
+                const noteContent = document.getElementById('noteContent').cloneNode(true);
+                
+                // Create a complete HTML document for printing
+                const printWindow = window.open('', '_blank');
+                const shareCode = '{{ share_code }}';
+                const createdDate = '{{ note.created_at[:10] if note.created_at else "Unknown" }}';
+                const views = {{ note.views if note.views else 0 }};
+                const now = new Date();
+                
+                printWindow.document.write(`
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <title>Web Notepad - Note ${shareCode}</title>
+                        <meta charset="UTF-8">
+                        <style>
+                            body {
+                                font-family: Arial, Helvetica, sans-serif;
+                                line-height: 1.6;
+                                padding: 40px;
+                                margin: 0;
+                                color: #333;
+                            }
+                            .header {
+                                text-align: center;
+                                margin-bottom: 30px;
+                                padding-bottom: 20px;
+                                border-bottom: 2px solid #667eea;
+                            }
+                            .header h1 {
+                                color: #667eea;
+                                margin: 0 0 10px 0;
+                            }
+                            .header p {
+                                margin: 5px 0;
+                                color: #666;
+                            }
+                            .content {
+                                margin: 30px 0;
+                                word-wrap: break-word;
+                                white-space: pre-wrap;
+                            }
+                            .content pre {
+                                background: #f5f5f5;
+                                padding: 15px;
+                                border-radius: 8px;
+                                overflow-x: auto;
+                                font-family: 'Courier New', monospace;
+                                font-size: 12pt;
+                                white-space: pre-wrap;
+                                word-wrap: break-word;
+                            }
+                            .footer {
+                                text-align: center;
+                                margin-top: 30px;
+                                padding-top: 20px;
+                                border-top: 1px solid #ddd;
+                                font-size: 10pt;
+                                color: #999;
+                            }
+                            @media print {
+                                body {
+                                    padding: 20px;
+                                }
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="header">
+                            <h1>Web Notepad Shared Note</h1>
+                            <p><strong>Share Code:</strong> ${shareCode}</p>
+                            <p><strong>Created:</strong> ${createdDate} | <strong>Views:</strong> ${views}</p>
+                            <p><strong>Downloaded:</strong> ${now.toLocaleString()}</p>
+                        </div>
+                        <div class="content">
+                            ${noteContent.innerHTML}
+                        </div>
+                        <div class="footer">
+                            <p>Generated by Web Notepad - Best Online Notepad Free No Login</p>
+                            <p>Note expires in 1 hour from creation</p>
+                        </div>
+                    </body>
+                    </html>
+                `);
+                
+                printWindow.document.close();
+                
+                // Wait for content to load then print
+                setTimeout(() => {
+                    printWindow.print();
+                    button.innerHTML = originalHTML;
+                    button.disabled = false;
+                    showToast('✅ PDF generated! Use "Save as PDF" in the print dialog.');
+                    // Close the window after print dialog is closed (user can close manually)
+                    setTimeout(() => {
+                        printWindow.close();
+                    }, 1000);
+                }, 500);
+                
+            } catch (error) {
+                console.error('PDF generation error:', error);
+                button.innerHTML = originalHTML;
+                button.disabled = false;
+                showToast('❌ Failed to generate PDF', 'error');
+            }
+        }
+        
+        // Alternative PDF download using data URL (no popup)
+        function downloadPDFDirect() {
             const button = document.getElementById('downloadPDFBtn');
             const originalHTML = button.innerHTML;
             button.innerHTML = '<span class="loading-spinner"></span> Generating PDF...';
             button.disabled = true;
             
             try {
-                const content = document.getElementById('noteContent').cloneNode(true);
+                const noteContent = document.getElementById('noteContent').cloneNode(true);
+                const shareCode = '{{ share_code }}';
+                const createdDate = '{{ note.created_at[:10] if note.created_at else "Unknown" }}';
+                const views = {{ note.views if note.views else 0 }};
+                const now = new Date();
                 
-                // Create a container for PDF generation
-                const element = document.createElement('div');
-                element.style.padding = '20px';
-                element.style.fontFamily = 'Arial, sans-serif';
-                element.style.fontSize = '12pt';
-                element.style.lineHeight = '1.6';
-                element.style.color = '#333';
-                
-                // Add header
-                const header = document.createElement('div');
-                header.style.textAlign = 'center';
-                header.style.marginBottom = '20px';
-                header.style.padding = '10px';
-                header.style.borderBottom = '2px solid #667eea';
-                header.innerHTML = `
-                    <h2 style="color: #667eea;">Web Shared Note</h2>
-                    <p><strong>Share Code:</strong> {{ share_code }} | <strong>Date:</strong> ${new Date().toLocaleString()}</p>
+                const htmlContent = `
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <title>Web Notepad - Note ${shareCode}</title>
+                        <meta charset="UTF-8">
+                        <style>
+                            body {
+                                font-family: Arial, Helvetica, sans-serif;
+                                line-height: 1.6;
+                                padding: 40px;
+                                margin: 0;
+                                color: #333;
+                            }
+                            .header {
+                                text-align: center;
+                                margin-bottom: 30px;
+                                padding-bottom: 20px;
+                                border-bottom: 2px solid #667eea;
+                            }
+                            .header h1 {
+                                color: #667eea;
+                                margin: 0 0 10px 0;
+                            }
+                            .content pre {
+                                background: #f5f5f5;
+                                padding: 15px;
+                                border-radius: 8px;
+                                overflow-x: auto;
+                                font-family: 'Courier New', monospace;
+                                white-space: pre-wrap;
+                                word-wrap: break-word;
+                            }
+                            .footer {
+                                text-align: center;
+                                margin-top: 30px;
+                                padding-top: 20px;
+                                border-top: 1px solid #ddd;
+                                font-size: 10pt;
+                                color: #999;
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="header">
+                            <h1>Web Notepad Shared Note</h1>
+                            <p><strong>Share Code:</strong> ${shareCode}</p>
+                            <p><strong>Created:</strong> ${createdDate} | <strong>Views:</strong> ${views}</p>
+                            <p><strong>Downloaded:</strong> ${now.toLocaleString()}</p>
+                        </div>
+                        <div class="content">
+                            ${noteContent.innerHTML}
+                        </div>
+                        <div class="footer">
+                            <p>Generated by Web Notepad - Best Online Notepad Free No Login</p>
+                        </div>
+                    </body>
+                    </html>
                 `;
-                element.appendChild(header);
                 
-                // Add content
-                const contentClone = content.cloneNode(true);
-                contentClone.style.margin = '0';
-                contentClone.style.padding = '10px';
-                element.appendChild(contentClone);
+                // Create a blob and download
+                const blob = new Blob([htmlContent], { type: 'application/pdf' });
+                // Note: This creates an HTML file, not PDF. For proper PDF, use print method above.
+                // This is a fallback that saves as HTML which can be printed to PDF
+                const link = document.createElement('a');
+                const url = URL.createObjectURL(blob);
+                link.href = url;
+                link.download = `webnotepad_note_${shareCode}.html`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
                 
-                // Add footer
-                const footer = document.createElement('div');
-                footer.style.textAlign = 'center';
-                footer.style.marginTop = '20px';
-                footer.style.padding = '10px';
-                footer.style.fontSize = '10pt';
-                footer.style.color = '#666';
-                footer.style.borderTop = '1px solid #ddd';
-                footer.innerHTML = 'Generated by Web Notepad - Best Online Notepad Free No Login';
-                element.appendChild(footer);
-                
-                const opt = {
-                    margin: [0.5, 0.5, 0.5, 0.5],
-                    filename: `omebox_note_{{ share_code }}.pdf`,
-                    image: { type: 'jpeg', quality: 0.98 },
-                    html2canvas: { scale: 2, useCORS: true },
-                    jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
-                };
-                
-                html2pdf().set(opt).from(element).save();
-                showToast('✅ PDF downloaded successfully!');
+                showToast('✅ HTML saved! Open and press Ctrl+P to save as PDF.');
             } catch (error) {
-                console.error('PDF generation error:', error);
-                showToast('❌ Failed to generate PDF', 'error');
+                console.error('Error:', error);
+                showToast('❌ Failed to generate', 'error');
             } finally {
                 button.innerHTML = originalHTML;
                 button.disabled = false;
             }
-        });
+        }
         
         // Download as TXT with proper formatting
-        document.getElementById('downloadTxtBtn').addEventListener('click', () => {
+        function downloadTXT() {
             const content = getFormattedContent();
             if (!content.trim()) {
                 showToast('❌ No content to download!', 'error');
@@ -672,7 +827,7 @@
             const link = document.createElement('a');
             const url = URL.createObjectURL(blob);
             link.href = url;
-            link.download = `omebox_note_{{ share_code }}.txt`;
+            link.download = `webnotepad_note_{{ share_code }}.txt`;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -680,9 +835,15 @@
             
             const lineCount = countLines();
             showToast(`✅ TXT file downloaded! (${lineCount} lines preserved)`);
-        });
+        }
         
-        // Countdown timer for expiry (1 hour expiry)
+        // PDF download (using print method - most reliable)
+        document.getElementById('downloadPDFBtn').addEventListener('click', downloadPDF);
+        
+        // TXT download
+        document.getElementById('downloadTxtBtn').addEventListener('click', downloadTXT);
+        
+        // Countdown timer for expiry
         function updateCountdown() {
             const expiresAt = '{{ note.expires_at }}';
             if (!expiresAt || expiresAt === 'None') {
@@ -716,7 +877,7 @@
         updateCountdown();
         setInterval(updateCountdown, 1000);
         
-        // Track view (send to backend for analytics)
+        // Track view
         async function trackView() {
             const shareCode = '{{ share_code }}';
             try {
@@ -729,12 +890,10 @@
             }
         }
         
-        // Track the view when page loads
         trackView();
         
-        // Add keyboard shortcuts
+        // Keyboard shortcuts
         document.addEventListener('keydown', (e) => {
-            // Ctrl/Cmd + C to copy content (if no text selected)
             if ((e.ctrlKey || e.metaKey) && e.key === 'c') {
                 const selection = window.getSelection();
                 if (!selection.toString()) {
@@ -742,15 +901,13 @@
                     document.getElementById('copyContentBtn').click();
                 }
             }
-            // Ctrl/Cmd + S to download as TXT
             if ((e.ctrlKey || e.metaKey) && e.key === 's') {
                 e.preventDefault();
-                document.getElementById('downloadTxtBtn').click();
+                downloadTXT();
             }
-            // Ctrl/Cmd + P to download as PDF
             if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
                 e.preventDefault();
-                document.getElementById('downloadPDFBtn').click();
+                downloadPDF();
             }
         });
         
