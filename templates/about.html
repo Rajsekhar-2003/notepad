@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>About Us - Online Web Notepad | Free No-Login Text Editor with QR Share</title>
+    <meta name="description" content="Web Notepad - Online Notepad is the best free notepad without login. Write notes, edit TXT files, share via QR code or 6-digit code. Auto-save, zero tracking. Download as PDF, Word, HTML, MD. Created by Rajsekhar Maity.">
+    <meta name="keywords" content="web notepad, online notepad, notes online, note pad, open notepad, online text editor, notes website, free notepad, notebook online, notepad app, online note taking, notepad download, wordpad online, free online text editor, writing pad online, online notepad editor, make a note, writing notepad, online save notes">
+    <meta name="author" content="Rajsekhar Maity">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://www.webnotepad.online/about">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='image.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='image.png') }}">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='image.png') }}">
+    <!-- Open Graph for social sharing -->
+    <meta property="og:title" content="About Web Online Notepad - Free No-Login Notepad with QR Code">
+    <meta property="og:description" content="Zero tracking, auto-save, code-friendly, share via QR or 6-digit code. Created by Rajsekhar Maity.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.webnotepad.online/about">
+    <meta property="og:image" content="https://www.webnotepad.online/og-notepad.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Web Online Notepad - Best Free Online Text Editor">
+    <meta name="twitter:description" content="Write note, edit txt, share with QR or 6-digit code. No login, auto-save, zero tracking.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(145deg, #f8fafc 0%, #eef2f7 100%);
+            color: #0f172a;
+            line-height: 1.5;
+            scroll-behavior: smooth;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+        }
+
+        /* header / badge */
+        .badge-dev {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(37, 99, 235, 0.1);
+            backdrop-filter: blur(2px);
+            padding: 0.4rem 1rem;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #1e40af;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(59,130,246,0.2);
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #0f172a, #2563eb);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .tagline {
+            font-size: 1.3rem;
+            color: #334155;
+            max-width: 750px;
+            margin-bottom: 2rem;
+            border-left: 4px solid #3b82f6;
+            padding-left: 1.2rem;
+            font-weight: 400;
+        }
+
+        .grid-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.8rem;
+            margin: 3rem 0;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(8px);
+            border-radius: 2rem;
+            padding: 1.8rem;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05), 0 8px 10px -6px rgba(0,0,0,0.02);
+            transition: transform 0.2s ease, box-shadow 0.2s;
+            border: 1px solid rgba(255,255,255,0.6);
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 30px -12px rgba(0,0,0,0.1);
+            border-color: #cbd5e1;
+        }
+        .card i {
+            font-size: 2.2rem;
+            color: #2563eb;
+            margin-bottom: 1rem;
+        }
+        .card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+        .card p {
+            color: #334155;
+        }
+
+        .share-demo {
+            background: #ffffffdd;
+            backdrop-filter: blur(12px);
+            border-radius: 2rem;
+            padding: 1.8rem;
+            margin: 2rem 0;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.05);
+        }
+
+        .demo-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .qr-box {
+            background: white;
+            padding: 1rem;
+            border-radius: 1.5rem;
+            text-align: center;
+            box-shadow: 0 5px 12px rgba(0,0,0,0.05);
+            min-width: 160px;
+        }
+        .qr-box canvas {
+            margin: 0 auto;
+            display: block;
+            border-radius: 12px;
+        }
+        .code-box {
+            flex: 1;
+            background: #f1f5f9;
+            border-radius: 1.5rem;
+            padding: 1.2rem;
+        }
+        .code-input-group {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            margin-top: 0.8rem;
+        }
+        .code-input-group input {
+            flex: 2;
+            padding: 0.8rem 1rem;
+            border-radius: 60px;
+            border: 1px solid #cbd5e1;
+            font-family: monospace;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            background: white;
+        }
+        .btn {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 0.7rem 1.4rem;
+            border-radius: 60px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: inherit;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #2563eb;
+            color: #2563eb;
+        }
+        .btn-outline:hover {
+            background: #2563eb;
+            color: white;
+        }
+        .btn:hover {
+            background: #1d4ed8;
+            transform: scale(0.98);
+        }
+        .download-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-top: 1.5rem;
+        }
+        .mini-badge {
+            background: #e6f0ff;
+            border-radius: 40px;
+            padding: 0.3rem 1rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        footer {
+            margin-top: 3rem;
+            text-align: center;
+            border-top: 1px solid #cbd5e1;
+            padding-top: 2rem;
+            font-size: 0.9rem;
+            color: #475569;
+        }
+        .dev-name {
+            font-weight: 700;
+            color: #0f172a;
+            background: linear-gradient(120deg, #1e293b, #2563eb);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+        @media (max-width: 680px) {
+            h1 { font-size: 2.2rem; }
+            .container { padding: 1.5rem; }
+        }
+        .note-alert {
+            background: #dcfce7;
+            border-left: 5px solid #22c55e;
+            padding: 0.8rem 1rem;
+            border-radius: 1rem;
+            margin: 1rem 0;
+        }
+
+
+        /* Header Styles */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #667eea;
+        }
+
+        .nav-links a.active {
+            color: #667eea;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo">📝 Web Notepad</div>
+            <div class="nav-links">
+                <a href="/">🏠 Home</a>
+                <a href="/access" >📥 Receiver</a>
+                <a href="/about">📖 About</a>
+                <a href="/privacy-policy">🛡️ Privacy Policy</a>
+            </div>
+        </div>
+    </header>
+
+<div class="container">
+    <h1>📝 Web Online Notepad</h1>
+    <div class="tagline">
+        The best <strong>free notepad without login</strong> — write note, edit txt file, share with QR code or 6-digit access code. Auto-save, zero tracking, code-friendly.
+    </div>
+
+    <!-- Key features grid with SEO keywords naturally integrated -->
+    <div class="grid-features">
+        <div class="card"><i class="fas fa-pen-fancy"></i><h3>Instant Notepad Online</h3><p><strong>Open notepad</strong> instantly, <strong>make a note</strong> or edit any TXT file. No sign-up, no delays. Perfect <strong>online note taking</strong> tool.</p></div>
+        <div class="card"><i class="fas fa-cloud-upload-alt"></i><h3>Auto-save & Zero Tracking</h3><p>Your notes are <strong>online save notes</strong> automatically. We respect privacy — zero tracking, no analytics, no login. A true <strong>free online text editor</strong>.</p></div>
+        <div class="card"><i class="fas fa-qrcode"></i><h3>Share via QR Code / 6-digit</h3><p>Generate QR code or secure 6-digit code. Friends paste code to receive note. Effortless sharing without emails or accounts.</p></div>
+        <div class="card"><i class="fas fa-file-download"></i><h3>Multi-Format Export</h3><p>Download notes as <strong>PDF, Word (DOCX), HTML, MD</strong>. Ideal for programmers, researchers, and writers.</p></div>
+        <div class="card"><i class="fas fa-laptop-code"></i><h3>Code-Friendly Editor</h3><p>Edit <strong>programming code</strong> or <strong>research code text</strong>. Syntax support, plain text power — your <strong>online notepad editor</strong> for devs.</p></div>
+        <div class="card"><i class="fas fa-globe"></i><h3>Accessible Anywhere</h3><p>Works as <strong>wordpad online</strong> replacement, <strong>writing pad online</strong> or <strong>notebook online</strong>. No <strong>notepad download</strong> needed — pure web.</p></div>
+    </div>
+
+    <!-- LIVE DEMO: SHARE VIA QR & 6-DIGIT CODE (Interactive simulation) -->
+    <div class="share-demo">
+        <h3 style="display: flex; gap: 0.5rem; align-items: center;"><i class="fas fa-share-alt"></i> ✨ Share any note without login — demo simulation</h3>
+        <p>Write something below (or edit TXT content) ➜ share with friends via <strong>QR code</strong> or <strong>6-digit access code</strong>. (No backend: demo shows how it works locally)</p>
+        
+        <div style="margin: 1rem 0;">
+            <textarea id="demoNoteContent" rows="4" style="width:100%; padding: 1rem; border-radius: 1.5rem; border: 1px solid #cbd5e1; font-family: monospace; font-size: 0.95rem;" placeholder="Write your note or paste code / research text here..."># Welcome to Web Online Notepad ✍️
+Edit this text, share via QR or 6-digit code. 
+Auto-save demo enabled. Zero tracking.</textarea>
+            <div style="font-size: 0.75rem; margin-top: 6px;"><i class="fas fa-save"></i> Auto-save active (localStorage)</div>
+        </div>
+
+        <div class="demo-row">
+            <div class="qr-box">
+                <i class="fas fa-qrcode" style="font-size: 1.3rem;"></i>
+                <div id="qrcodeContainer"></div>
+                <p style="margin-top: 8px; font-size: 0.75rem;">Scan to view note</p>
+                <button id="refreshQRBtn" class="btn-outline btn" style="padding: 0.3rem 1rem; font-size: 0.7rem;"><i class="fas fa-sync-alt"></i> Refresh QR</button>
+            </div>
+            <div class="code-box">
+                <i class="fas fa-key"></i> <strong>6-digit access code</strong>
+                <p style="font-size: 0.85rem; margin: 8px 0;">Share this code — friend pastes it to receive same note.</p>
+                <div class="code-input-group">
+                    <input type="text" id="sixDigitCodeDisplay" readonly value="8723A9" style="background:#eef2ff; font-weight:bold;">
+                    <button id="copyCodeBtn" class="btn"><i class="far fa-copy"></i> Copy</button>
+                    <button id="regenerateCodeBtn" class="btn-outline btn"><i class="fas fa-random"></i> New code</button>
+                </div>
+                <div style="margin-top: 1rem;">
+                    <label style="font-weight:500;">🔓 Paste 6-digit code to receive note:</label>
+                    <div class="code-input-group">
+                        <input type="text" id="verifyCodeInput" placeholder="e.g., 8723A9" maxlength="6" style="text-transform:uppercase">
+                        <button id="revealNoteBtn" class="btn">Receive note <i class="fas fa-inbox"></i></button>
+                    </div>
+                    <div id="retrievedMessage" class="note-alert" style="display:none; margin-top:12px;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="download-buttons">
+            <span class="mini-badge"><i class="fas fa-download"></i> Export options:</span>
+            <button id="downloadPDFBtn" class="btn-outline btn" style="padding:0.4rem 1rem;"><i class="fas fa-file-pdf"></i> PDF</button>
+            <button id="downloadWordBtn" class="btn-outline btn" style="padding:0.4rem 1rem;"><i class="fas fa-file-word"></i> Word (DOCX)</button>
+            <button id="downloadHTMLBtn" class="btn-outline btn" style="padding:0.4rem 1rem;"><i class="fab fa-html5"></i> HTML</button>
+            <button id="downloadMDBtn" class="btn-outline btn" style="padding:0.4rem 1rem;"><i class="fas fa-markdown"></i> MD</button>
+        </div>
+        <p style="font-size: 0.75rem; margin-top: 1rem; color:#475569;"><i class="fas fa-shield-alt"></i> Zero tracking, no data leaves your browser. QR / 6‑digit demo uses local storage for simulation — same concept as our secure notepad.</p>
+    </div>
+
+    <!-- Why choose + developer credit + full SEO friendly paragraph -->
+    <div style="background: #ffffffcc; border-radius: 2rem; padding: 1.8rem; margin-top: 1rem;">
+        <h2><i class="fas fa-star-of-life"></i> Why Choose This Online Notepad?</h2>
+        <p><strong>Web online notepad</strong> is the ultimate <strong>notes website</strong> that combines simplicity and power. Unlike traditional <strong>notepad app</strong> or <strong>wordpad online</strong> alternatives, you get an instant <strong>online text editor</strong> with <strong>auto-save</strong>, <strong>zero tracking</strong>, and <strong>no login required</strong>. Whether you need to <strong>write note</strong>, <strong>edit txt file</strong>, or <strong>make a note</strong> for coding, this <strong>free online text editor</strong> serves as a <strong>writing notepad</strong> and <strong>writing pad online</strong> for everyone. You can <strong>open notepad</strong> on any device, use it as <strong>notebook online</strong>, and <strong>online save notes</strong> without fear. Plus, share seamlessly via QR code or 6-digit secure access code — your friends can retrieve notes instantly. Developers and researchers can edit <strong>programming code</strong> or <strong>research code text</strong> and download as PDF, Word, HTML, or Markdown. No <strong>notepad download</strong>, no bloat. It’s the perfect <strong>online notepad editor</strong> for students, coders, and writers worldwide.</p>
+        <br>
+        <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; justify-content: space-between; border-top: 1px solid #e2e8f0; padding-top: 1.5rem;">
+            <div><i class="fas fa-user-astronaut"></i> <strong>Developer:</strong> <span class="dev-name">Rajsekhar Maity</span> — building privacy-first, no-login web tools.</div>
+            <div><i class="fas fa-heart" style="color:#ef4444;"></i> 100% free, open web philosophy</div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 Web Online Notepad — best free notepad without login | <strong>online note taking</strong> redefined. Zero tracking, auto-save, share via QR or 6‑digit access code. Created with ❤️ by Rajsekhar Maity.</p>
+        <p style="margin-top: 0.8rem;"><i class="fas fa-check-circle"></i> Keywords: web notepad | online notepad | notes online | note pad | open notepad | online text editor | notes website | free notepad | notebook online | notepad app | online note taking | notepad download | wordpad online | free online text editor | writing pad online | online notepad editor | make a note | writing notepad | online save notes</p>
+    </footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+<script>
+    (function() {
+        // DOM elements
+        const noteTextarea = document.getElementById('demoNoteContent');
+        const qrContainer = document.getElementById('qrcodeContainer');
+        let currentQR = null;
+        const sixDigitSpan = document.getElementById('sixDigitCodeDisplay');
+        const copyCodeBtn = document.getElementById('copyCodeBtn');
+        const regenerateCodeBtn = document.getElementById('regenerateCodeBtn');
+        const verifyCodeInput = document.getElementById('verifyCodeInput');
+        const revealNoteBtn = document.getElementById('revealNoteBtn');
+        const retrievedMsgDiv = document.getElementById('retrievedMessage');
+        const refreshQRBtn = document.getElementById('refreshQRBtn');
+
+        // Helper: generate random 6-digit alphanumeric (uppercase + digits)
+        function generateRandomCode() {
+            const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            let code = '';
+            for(let i = 0; i < 6; i++) {
+                code += chars[Math.floor(Math.random() * chars.length)];
+            }
+            return code;
+        }
+
+        // store current note and code mapping (simulate key-value store in memory)
+        let noteStore = new Map(); // code -> noteContent
+        let currentCode = sixDigitSpan.value;
+
+        function updateStoreAndQR() {
+            const note = noteTextarea.value;
+            // update store for current code
+            noteStore.set(currentCode, note);
+            // also save for local auto-save & persist
+            localStorage.setItem('webNotepad_lastNote', note);
+            localStorage.setItem('webNotepad_lastCode', currentCode);
+            // generate QR that encodes note content (simulate shareable link data)
+            generateQRForNote(note);
+        }
+
+        function generateQRForNote(noteContent) {
+            if (currentQR) {
+                // clear previous
+                qrContainer.innerHTML = '';
+            }
+            // QR encodes a simple text: "Note: " + first 100 chars? better to encode full note (but large QR can be big, but demo OK)
+            // To be realistic: encode the note content with prefix
+            const qrData = `📝 WebNotepad:\n${noteContent.substring(0, 300)}${noteContent.length>300 ? '...' : ''}\n\nAccess code: ${currentCode}`;
+            currentQR = new QRCode(qrContainer, {
+                text: qrData,
+                width: 128,
+                height: 128,
+                colorDark: "#0f172a",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.L
+            });
+        }
+
+        function syncFromTextarea() {
+            updateStoreAndQR();
+        }
+
+        // auto-save effect on input
+        noteTextarea.addEventListener('input', () => {
+            syncFromTextarea();
+        });
+
+        // refresh QR manually
+        refreshQRBtn.addEventListener('click', () => {
+            syncFromTextarea();
+        });
+
+        // regenerate new 6-digit code
+        function regenerateCode() {
+            const newCode = generateRandomCode();
+            currentCode = newCode;
+            sixDigitSpan.value = currentCode;
+            const currentNote = noteTextarea.value;
+            noteStore.set(currentCode, currentNote);
+            // remove old mapping not needed
+            updateStoreAndQR();
+            localStorage.setItem('webNotepad_lastCode', currentCode);
+        }
+
+        regenerateCodeBtn.addEventListener('click', () => {
+            regenerateCode();
+        });
+
+        // copy code
+        copyCodeBtn.addEventListener('click', () => {
+            navigator.clipboard.writeText(currentCode);
+            alert('6-digit access code copied: ' + currentCode);
+        });
+
+        // RECEIVE note by pasting 6-digit code (friend side simulation)
+        revealNoteBtn.addEventListener('click', () => {
+            const enteredCode = verifyCodeInput.value.trim().toUpperCase();
+            if (enteredCode.length !== 6) {
+                retrievedMsgDiv.style.display = 'block';
+                retrievedMsgDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Please enter a valid 6-digit code (letters/numbers).';
+                retrievedMsgDiv.style.background = '#fee2e2';
+                retrievedMsgDiv.style.borderLeftColor = '#ef4444';
+                return;
+            }
+            if (noteStore.has(enteredCode)) {
+                const retrievedNote = noteStore.get(enteredCode);
+                retrievedMsgDiv.style.display = 'block';
+                retrievedMsgDiv.innerHTML = `<i class="fas fa-check-circle"></i> <strong>Note received!</strong><br><pre style="background:#f1f5f9; padding:0.6rem; border-radius:1rem; margin-top:6px; overflow-x:auto;">${escapeHtml(retrievedNote.substring(0, 500))}${retrievedNote.length>500 ? '…' : ''}</pre>`;
+                retrievedMsgDiv.style.background = '#dcfce7';
+                retrievedMsgDiv.style.borderLeftColor = '#22c55e';
+            } else {
+                retrievedMsgDiv.style.display = 'block';
+                retrievedMsgDiv.innerHTML = '<i class="fas fa-ban"></i> Invalid code or note expired. Ask friend to generate new share code.';
+                retrievedMsgDiv.style.background = '#fff3cd';
+                retrievedMsgDiv.style.borderLeftColor = '#f59e0b';
+            }
+        });
+
+        function escapeHtml(str) {
+            return str.replace(/[&<>]/g, function(m) {
+                if(m === '&') return '&amp;';
+                if(m === '<') return '&lt;';
+                if(m === '>') return '&gt;';
+                return m;
+            }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+                return c;
+            });
+        }
+
+        // Download handlers: PDF, Word (DOCX via Blob), HTML, MD
+        function getNoteContentForExport() {
+            return noteTextarea.value;
+        }
+
+        document.getElementById('downloadPDFBtn').addEventListener('click', () => {
+            const content = getNoteContentForExport();
+            const element = document.createElement('div');
+            element.style.padding = '20px';
+            element.style.fontFamily = 'Inter, sans-serif';
+            element.innerHTML = `<h2>Web Online Notepad - Export</h2><pre style="white-space:pre-wrap; font-size:14px;">${escapeHtml(content)}</pre><br><p>Generated by Web Online Notepad | Zero Tracking</p>`;
+            html2pdf().set({ margin: 0.5, filename: 'notepad_export.pdf', html2canvas: { scale: 2 }, jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' } }).from(element).save();
+        });
+
+        document.getElementById('downloadWordBtn').addEventListener('click', () => {
+            const content = getNoteContentForExport();
+            const blob = new Blob([`<html><head><meta charset="UTF-8"><title>Online_Notepad_Export</title></head><body><h1>Web Online Notepad</h1><pre style="font-family:monospace; white-space:pre-wrap;">${escapeHtml(content)}</pre><p>Exported from free online text editor - Rajsekhar Maity</p></body></html>`], { type: 'application/msword' });
+            saveAs(blob, 'notepad_notes.doc');
+        });
+
+        document.getElementById('downloadHTMLBtn').addEventListener('click', () => {
+            const content = getNoteContentForExport();
+            const htmlContent = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Online Notepad Export</title></head><body style="font-family:sans-serif; padding:2rem;"><h2>📝 Web Online Notepad</h2><pre style="background:#f4f4f4; padding:1rem;">${escapeHtml(content)}</pre><p>Generated by best free notepad without login</p></body></html>`;
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            saveAs(blob, 'notepad_export.html');
+        });
+
+        document.getElementById('downloadMDBtn').addEventListener('click', () => {
+            const content = getNoteContentForExport();
+            const mdContent = `# Web Online Notepad Export\n\n${content}\n\n---\n*Saved from online text editor | No login, auto-save, zero tracking*`;
+            const blob = new Blob([mdContent], { type: 'text/markdown' });
+            saveAs(blob, 'notepad_notes.md');
+        });
+
+        // Auto-load previous note from localStorage (auto-save simulation)
+        const savedNote = localStorage.getItem('webNotepad_lastNote');
+        const savedCode = localStorage.getItem('webNotepad_lastCode');
+        if (savedNote !== null) noteTextarea.value = savedNote;
+        if (savedCode !== null && savedCode.length === 6) {
+            currentCode = savedCode;
+            sixDigitSpan.value = currentCode;
+        } else {
+            currentCode = sixDigitSpan.value;
+        }
+        // rebuild noteStore mapping from existing saved data
+        noteStore.set(currentCode, noteTextarea.value);
+        updateStoreAndQR();
+        // additionally when page loads sync
+        syncFromTextarea();
+    })();
+</script>
+</body>
+</html>

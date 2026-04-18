@@ -1,0 +1,760 @@
+<!-- templates/shared.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="View shared notes securely with 6-digit code. Best online notepad free no login - OmeBox">
+    <title>Shared Note - Best Online Notepad Free No Login | Web Notepad</title>
+     <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='image.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='image.png') }}">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='image.png') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- html2pdf library for PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            min-height: 100vh; 
+            padding: 20px; 
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .shared-container { 
+            max-width: 1000px; 
+            margin: 20px auto;
+            flex: 1;
+        }
+        
+        .shared-card { 
+            background: white; 
+            border-radius: 24px; 
+            padding: 30px; 
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); 
+        }
+        
+        .note-content { 
+            font-size: 16px; 
+            line-height: 1.6; 
+            min-height: 300px;
+            word-wrap: break-word;
+            word-break: break-word;
+            white-space: pre-wrap;
+            overflow-wrap: break-word;
+        }
+        
+        /* Style for rich text content */
+        .note-content p,
+        .note-content div,
+        .note-content span,
+        .note-content h1,
+        .note-content h2,
+        .note-content h3,
+        .note-content h4,
+        .note-content ul,
+        .note-content ol,
+        .note-content li,
+        .note-content pre,
+        .note-content code {
+            word-wrap: break-word;
+            word-break: break-word;
+            white-space: pre-wrap;
+            overflow-wrap: break-word;
+            max-width: 100%;
+        }
+        
+        .note-content pre {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .note-content img {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .copy-btn, .download-btn { 
+            background: #667eea; 
+            color: white; 
+            border: none; 
+            border-radius: 40px; 
+            padding: 8px 20px; 
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .copy-btn:hover, .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .alert {
+            border-radius: 12px;
+        }
+        
+        .toast-message {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+        
+        /* Header Styles */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #667eea;
+        }
+
+        .nav-links a.active {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        /* Footer Styles */
+        .footer {
+            background: #1a1a2e;
+            color: #fff;
+            padding: 3rem 2rem 1rem;
+            margin-top: auto;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .footer-section p {
+            color: #aaa;
+            line-height: 1.6;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section ul li a {
+            color: #aaa;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section ul li a:hover {
+            color: #667eea;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid #333;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        /* Loading spinner for PDF */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .shared-card {
+                padding: 20px;
+            }
+            
+            .d-flex {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav-container {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .nav-links {
+                justify-content: center;
+            }
+            
+            .footer-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            
+            .button-group {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo-container">
+                <img src="{{ url_for('static', filename='image.png') }}"
+                     alt="OmeBox Logo"
+                     height="48"
+                     width="48"
+                     class="logo-img me-2"
+                     style="border-radius: 12px;">
+                <span class="logo">Web Notepad</span>
+            </div>
+            <div class="nav-links">
+                <a href="/">🏠 Home</a>
+                <a href="/access">📥 Receiver</a>
+                <a href="/about">📖 About</a>
+                <a href="/privacy-policy">🛡️ Privacy Policy</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="shared-container">
+        <div class="shared-card">
+            <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+                <h2><i class="bi bi-journal-bookmark-fill me-2"></i>WebNotepad Shared Note</h2>
+                <a href="/" class="btn btn-outline-primary"><i class="bi bi-plus-circle"></i> Create Your Own Note</a>
+            </div>
+            
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle-fill me-2"></i>
+                <strong>Shared via code:</strong> <code style="font-size: 1.1rem; background: white; padding: 4px 8px; border-radius: 6px;">{{ share_code }}</code>
+                <span class="mx-2">•</span>
+                <i class="bi bi-eye"></i> <strong>Views:</strong> {{ note.views if note.views else 0 }}
+                <span class="mx-2">•</span>
+                <i class="bi bi-calendar"></i> <strong>Expires:</strong> {{ note.expires_at[:10] if note.expires_at else '1 hour' }}
+                <span class="mx-2">•</span>
+                <i class="bi bi-files"></i> <strong>Lines:</strong> <span id="lineCount">0</span>
+            </div>
+            
+            <!-- Note Content - Properly formatted -->
+            <div class="note-content" id="noteContent">
+                {% if note.html and note.html.strip() %}
+                    {{ note.html | safe }}
+                {% elif note.content and note.content.strip() %}
+                    <pre style="white-space: pre-wrap; word-wrap: break-word; font-family: inherit; margin: 0;">{{ note.content }}</pre>
+                {% else %}
+                    <div class="text-muted text-center py-5">
+                        <i class="bi bi-file-text" style="font-size: 48px;"></i>
+                        <p class="mt-3">No content available for this shared note.</p>
+                    </div>
+                {% endif %}
+            </div>
+            
+            <hr class="my-4">
+            
+            <div class="d-flex gap-3 justify-content-between align-items-center flex-wrap button-group">
+                <div class="d-flex gap-2 flex-wrap">
+                    <button class="copy-btn" id="copyLinkBtn">
+                        <i class="bi bi-link-45deg"></i> Copy Share Link
+                    </button>
+                    <button class="copy-btn" id="copyCodeBtn" style="background:#28a745;">
+                        <i class="bi bi-grid-3x3-gap-fill"></i> Copy Code
+                    </button>
+                    <button class="copy-btn" id="copyContentBtn" style="background:#17a2b8;">
+                        <i class="bi bi-clipboard-check"></i> Copy Content (Formatted)
+                    </button>
+                    <!--<button class="download-btn" id="downloadPDFBtn" style="background:#dc3545;">
+                        <i class="bi bi-file-pdf"></i> Download PDF
+                    </button>-->
+                    <button class="download-btn" id="downloadTxtBtn" style="background:#6c757d;">
+                        <i class="bi bi-file-text"></i> Download TXT
+                    </button>
+                </div>
+                <div class="text-muted small">
+                    <i class="bi bi-calendar-check"></i> Created: {{ note.created_at[:10] if note.created_at else 'Unknown' }}
+                    <span class="mx-2">•</span>
+                    <i class="bi bi-hourglass-split"></i> Expires in: <span id="expiryCountdown"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>📝 Web Notepad</h3>
+                <p>Best online notepad free no login. Share notes instantly with 6-digit codes. Secure, fast, and no registration required.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/access">Receiver</a></li>
+                    <li><a href="/">Web</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Legal</h3>
+                <ul>
+                    <li><a href="#" id="aboutLink">About</a></li>
+                    <li><a href="#" id="privacyLink">Privacy Policy</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Web Notepad - Best Online Notepad Free No Login | All notes expire in 1 hour</p>
+        </div>
+    </footer>
+
+    <!-- Modals for About and Privacy Policy -->
+    <div id="aboutModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:2000; align-items:center; justify-content:center;">
+        <div style="background:white; max-width:500px; margin:20px; padding:30px; border-radius:15px; position:relative;">
+            <button onclick="closeModal('aboutModal')" style="position:absolute; top:15px; right:15px; background:none; border:none; font-size:24px; cursor:pointer;">&times;</button>
+            <h2>About Web Notepad</h2>
+            <p style="margin-top:20px; line-height:1.6;">Web Notepad is the best online notepad free no login required. Share your notes instantly with a secure 6-digit code. Perfect for quick notes, temporary messages, and secure sharing.</p>
+            <p style="margin-top:15px; line-height:1.6;">✨ Features:</p>
+            <ul style="margin-top:10px; margin-left:20px;">
+                <li>No registration needed</li>
+                <li>6-digit code access</li>
+                <li>1-hour automatic expiry</li>
+                <li>Fast and secure</li>
+                <li>Mobile responsive</li>
+                <li>PDF & TXT download support</li>
+            </ul>
+            <button onclick="closeModal('aboutModal')" style="margin-top:20px; padding:10px 20px; background:#667eea; color:white; border:none; border-radius:8px; cursor:pointer;">Close</button>
+        </div>
+    </div>
+
+    <div id="privacyModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:2000; align-items:center; justify-content:center;">
+        <div style="background:white; max-width:500px; margin:20px; padding:30px; border-radius:15px; position:relative; max-height:80vh; overflow-y:auto;">
+            <button onclick="closeModal('privacyModal')" style="position:absolute; top:15px; right:15px; background:none; border:none; font-size:24px; cursor:pointer;">&times;</button>
+            <h2>Privacy Policy</h2>
+            <p style="margin-top:20px; line-height:1.6;"><strong>Last Updated:</strong> December 2024</p>
+            <p style="margin-top:15px; line-height:1.6;">At Web Notepad, we take your privacy seriously. This privacy policy explains how we handle your data.</p>
+            
+            <h3 style="margin-top:20px;">1. Data Collection</h3>
+            <p>We do not collect any personal information. All notes are stored temporarily and expire after 1 hour.</p>
+            
+            <h3 style="margin-top:15px;">2. Data Storage</h3>
+            <p>Notes are stored locally and automatically deleted after 1 hour. No permanent storage of your content.</p>
+            
+            <h3 style="margin-top:15px;">3. Cookies</h3>
+            <p>We use only essential cookies for functionality. No tracking cookies are used.</p>
+            
+            <h3 style="margin-top:15px;">4. Third Parties</h3>
+            <p>We do not share any data with third parties.</p>
+            
+            <h3 style="margin-top:15px;">5. Your Rights</h3>
+            <p>You have full control over your notes. Delete them anytime or let them expire automatically.</p>
+            
+            <button onclick="closeModal('privacyModal')" style="margin-top:20px; padding:10px 20px; background:#667eea; color:white; border:none; border-radius:8px; cursor:pointer;">Close</button>
+        </div>
+    </div>
+    
+    <script>
+        // Get note content with proper formatting preservation
+        function getFormattedContent() {
+            const noteContentDiv = document.getElementById('noteContent');
+            let contentText = '';
+            
+            // Check if there's a pre tag (plain text)
+            const preElement = noteContentDiv.querySelector('pre');
+            if (preElement) {
+                // Preserve exact formatting including line breaks and spaces
+                contentText = preElement.innerText || preElement.textContent;
+            } else {
+                // For HTML content, get text while preserving line breaks
+                contentText = noteContentDiv.innerText || noteContentDiv.textContent;
+            }
+            
+            return contentText;
+        }
+        
+        // Get HTML content for PDF
+        function getHTMLContent() {
+            const noteContentDiv = document.getElementById('noteContent');
+            return noteContentDiv.innerHTML;
+        }
+        
+        // Count lines in content
+        function countLines() {
+            const content = getFormattedContent();
+            if (!content.trim()) return 0;
+            const lines = content.split(/\r\n|\r|\n/);
+            return lines.length;
+        }
+        
+        // Display line count
+        document.getElementById('lineCount').innerText = countLines();
+        
+        // Function to show toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = 'toast-message';
+            toast.style.backgroundColor = type === 'success' ? '#28a745' : '#dc3545';
+            toast.innerHTML = `<i class="bi bi-${type === 'success' ? 'check-circle' : 'exclamation-circle'} me-2"></i>${message}`;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+        
+        // Modal functions
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+        
+        // Event listeners for footer links
+        const aboutLink = document.getElementById('aboutLink');
+        const privacyLink = document.getElementById('privacyLink');
+        
+        if (aboutLink) {
+            aboutLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                openModal('aboutModal');
+            });
+        }
+        
+        if (privacyLink) {
+            privacyLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                openModal('privacyModal');
+            });
+        }
+        
+        // Close modals when clicking outside
+        window.addEventListener('click', (e) => {
+            if (e.target.id === 'aboutModal') closeModal('aboutModal');
+            if (e.target.id === 'privacyModal') closeModal('privacyModal');
+        });
+        
+        // Copy share link
+        document.getElementById('copyLinkBtn').addEventListener('click', async () => {
+            try {
+                await navigator.clipboard.writeText(window.location.href);
+                showToast('✅ Share link copied to clipboard!');
+            } catch (err) {
+                const textarea = document.createElement('textarea');
+                textarea.value = window.location.href;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                showToast('✅ Share link copied to clipboard!');
+            }
+        });
+        
+        // Copy share code
+        document.getElementById('copyCodeBtn').addEventListener('click', async () => {
+            const code = '{{ share_code }}';
+            try {
+                await navigator.clipboard.writeText(code);
+                showToast(`✅ Code "${code}" copied to clipboard!`);
+            } catch (err) {
+                const textarea = document.createElement('textarea');
+                textarea.value = code;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                showToast(`✅ Code "${code}" copied to clipboard!`);
+            }
+        });
+        
+        // Copy note content WITH formatting preserved
+        document.getElementById('copyContentBtn').addEventListener('click', async () => {
+            const formattedContent = getFormattedContent();
+            
+            if (formattedContent && formattedContent.trim()) {
+                try {
+                    await navigator.clipboard.writeText(formattedContent);
+                    const lineCount = countLines();
+                    showToast(`✅ Note content copied! (${lineCount} lines preserved with formatting)`);
+                } catch (err) {
+                    const textarea = document.createElement('textarea');
+                    textarea.value = formattedContent;
+                    document.body.appendChild(textarea);
+                    textarea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textarea);
+                    const lineCount = countLines();
+                    showToast(`✅ Note content copied! (${lineCount} lines preserved with formatting)`);
+                }
+            } else {
+                showToast('❌ No content to copy!', 'error');
+            }
+        });
+        
+        // Download as PDF
+        document.getElementById('downloadPDFBtn').addEventListener('click', async () => {
+            const button = document.getElementById('downloadPDFBtn');
+            const originalHTML = button.innerHTML;
+            button.innerHTML = '<span class="loading-spinner"></span> Generating PDF...';
+            button.disabled = true;
+            
+            try {
+                const content = document.getElementById('noteContent').cloneNode(true);
+                
+                // Create a container for PDF generation
+                const element = document.createElement('div');
+                element.style.padding = '20px';
+                element.style.fontFamily = 'Arial, sans-serif';
+                element.style.fontSize = '12pt';
+                element.style.lineHeight = '1.6';
+                element.style.color = '#333';
+                
+                // Add header
+                const header = document.createElement('div');
+                header.style.textAlign = 'center';
+                header.style.marginBottom = '20px';
+                header.style.padding = '10px';
+                header.style.borderBottom = '2px solid #667eea';
+                header.innerHTML = `
+                    <h2 style="color: #667eea;">Web Shared Note</h2>
+                    <p><strong>Share Code:</strong> {{ share_code }} | <strong>Date:</strong> ${new Date().toLocaleString()}</p>
+                `;
+                element.appendChild(header);
+                
+                // Add content
+                const contentClone = content.cloneNode(true);
+                contentClone.style.margin = '0';
+                contentClone.style.padding = '10px';
+                element.appendChild(contentClone);
+                
+                // Add footer
+                const footer = document.createElement('div');
+                footer.style.textAlign = 'center';
+                footer.style.marginTop = '20px';
+                footer.style.padding = '10px';
+                footer.style.fontSize = '10pt';
+                footer.style.color = '#666';
+                footer.style.borderTop = '1px solid #ddd';
+                footer.innerHTML = 'Generated by Web Notepad - Best Online Notepad Free No Login';
+                element.appendChild(footer);
+                
+                const opt = {
+                    margin: [0.5, 0.5, 0.5, 0.5],
+                    filename: `omebox_note_{{ share_code }}.pdf`,
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2, useCORS: true },
+                    jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+                };
+                
+                html2pdf().set(opt).from(element).save();
+                showToast('✅ PDF downloaded successfully!');
+            } catch (error) {
+                console.error('PDF generation error:', error);
+                showToast('❌ Failed to generate PDF', 'error');
+            } finally {
+                button.innerHTML = originalHTML;
+                button.disabled = false;
+            }
+        });
+        
+        // Download as TXT with proper formatting
+        document.getElementById('downloadTxtBtn').addEventListener('click', () => {
+            const content = getFormattedContent();
+            if (!content.trim()) {
+                showToast('❌ No content to download!', 'error');
+                return;
+            }
+            
+            const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.href = url;
+            link.download = `omebox_note_{{ share_code }}.txt`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+            
+            const lineCount = countLines();
+            showToast(`✅ TXT file downloaded! (${lineCount} lines preserved)`);
+        });
+        
+        // Countdown timer for expiry (1 hour expiry)
+        function updateCountdown() {
+            const expiresAt = '{{ note.expires_at }}';
+            if (!expiresAt || expiresAt === 'None') {
+                document.getElementById('expiryCountdown').innerText = '1 hour';
+                return;
+            }
+            
+            const expiryDate = new Date(expiresAt);
+            const now = new Date();
+            const diff = expiryDate - now;
+            
+            if (diff <= 0) {
+                document.getElementById('expiryCountdown').innerText = 'Expired';
+                return;
+            }
+            
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            if (hours > 0) {
+                document.getElementById('expiryCountdown').innerText = `${hours}h ${minutes}m ${seconds}s`;
+            } else if (minutes > 0) {
+                document.getElementById('expiryCountdown').innerText = `${minutes}m ${seconds}s`;
+            } else {
+                document.getElementById('expiryCountdown').innerText = `${seconds}s`;
+            }
+        }
+        
+        // Update countdown every second
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+        
+        // Track view (send to backend for analytics)
+        async function trackView() {
+            const shareCode = '{{ share_code }}';
+            try {
+                await fetch(`/api/note/${shareCode}`, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+            } catch (err) {
+                console.log('Analytics tracking failed:', err);
+            }
+        }
+        
+        // Track the view when page loads
+        trackView();
+        
+        // Add keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            // Ctrl/Cmd + C to copy content (if no text selected)
+            if ((e.ctrlKey || e.metaKey) && e.key === 'c') {
+                const selection = window.getSelection();
+                if (!selection.toString()) {
+                    e.preventDefault();
+                    document.getElementById('copyContentBtn').click();
+                }
+            }
+            // Ctrl/Cmd + S to download as TXT
+            if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                e.preventDefault();
+                document.getElementById('downloadTxtBtn').click();
+            }
+            // Ctrl/Cmd + P to download as PDF
+            if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
+                e.preventDefault();
+                document.getElementById('downloadPDFBtn').click();
+            }
+        });
+        
+        console.log('Shared note loaded successfully! Total lines:', countLines());
+    </script>
+</body>
+</html>

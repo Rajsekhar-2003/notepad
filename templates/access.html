@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Best online notepad free no login - Access shared notes with 6-digit code. Secure, fast, and no registration required.">
+    <meta name="keywords" content="online notepad, free notepad, no login notepad, share notes, 6 digit code, secure notes">
+    <meta name="author" content="Web Notepad">
+    <title>Access Shared Note - Best Online Notepad Free No Login | Web Notepad</title>
+
+    
+     <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='image.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='image.png') }}">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='image.png') }}">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header Styles */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #667eea;
+        }
+
+        .nav-links a.active {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .access-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .icon {
+            text-align: center;
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .code-input-container {
+            margin-bottom: 25px;
+        }
+
+        .code-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 32px;
+            text-align: center;
+            letter-spacing: 10px;
+            font-weight: bold;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            transition: all 0.3s;
+            font-family: 'Courier New', monospace;
+        }
+
+        .code-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .code-input.error {
+            border-color: #f44336;
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .message {
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 14px;
+            display: none;
+        }
+
+        .message.error {
+            background: #fee;
+            color: #c33;
+            border-left: 4px solid #c33;
+            display: block;
+        }
+
+        .message.success {
+            background: #efe;
+            color: #3c3;
+            border-left: 4px solid #3c3;
+            display: block;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Footer Styles */
+        .footer {
+            background: #1a1a2e;
+            color: #fff;
+            padding: 3rem 2rem 1rem;
+            margin-top: auto;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .footer-section p {
+            color: #aaa;
+            line-height: 1.6;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section ul li a {
+            color: #aaa;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section ul li a:hover {
+            color: #667eea;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid #333;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .nav-links {
+                justify-content: center;
+            }
+            
+            .access-card {
+                padding: 25px;
+            }
+            
+            .code-input {
+                font-size: 24px;
+                letter-spacing: 5px;
+            }
+            
+            .footer-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo">📝 Web Notepad</div>
+            <div class="nav-links">
+                <a href="/">🏠 Home</a>
+                <a href="/access" class="active">📥 Receiver</a>
+                <a href="/about">📖 About</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container">
+            <div class="access-card">
+                <div class="icon">🔐</div>
+                <h1>Access Shared Note</h1>
+                <div class="subtitle">Enter the 6-digit code to view the content</div>
+                
+                <div class="code-input-container">
+                    <input type="text" 
+                           id="codeInput" 
+                           class="code-input" 
+                           maxlength="6" 
+                           placeholder="000000"
+                           inputmode="numeric"
+                           pattern="\d*"
+                           autofocus>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-secondary" id="clearBtn">Clear</button>
+                    <button class="btn btn-primary" id="accessBtn">Access Note</button>
+                </div>
+                
+                <div id="message" class="message"></div>
+                
+                <div class="back-link">
+                    <a href="/">← Back to Notepad</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>📝 Web Notepad</h3>
+                <p>Best online notepad free no login. Share notes instantly with 6-digit codes. Secure, fast, and no registration required.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/access">Receiver</a></li>
+                    <li><a href="/">Web Notepad</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Legal</h3>
+                <ul>
+                    <li><a href="#" id="aboutLink">About</a></li>
+                    <li><a href="#" id="privacyLink">Privacy Policy</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Web Notepad - Best Online Notepad Free No Login | All notes expire in 1 hour | <a href="/privacy-policy">Privacy Policy</a></p>
+        </div>
+    </footer>
+
+    <!-- Modals for About and Privacy Policy -->
+    <div id="aboutModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:2000; align-items:center; justify-content:center;">
+        <div style="background:white; max-width:500px; margin:20px; padding:30px; border-radius:15px; position:relative;">
+            <button onclick="closeModal('aboutModal')" style="position:absolute; top:15px; right:15px; background:none; border:none; font-size:24px; cursor:pointer;">&times;</button>
+            <h2>About Web Notepad</h2>
+            <p style="margin-top:20px; line-height:1.6;">Web Notepad is the best online notepad free no login required. Share your notes instantly with a secure 6-digit code. Perfect for quick notes, temporary messages, and secure sharing.</p>
+            <p style="margin-top:15px; line-height:1.6;">✨ Features:</p>
+            <ul style="margin-top:10px; margin-left:20px;">
+                <li>No registration needed</li>
+                <li>6-digit code access</li>
+                <li>1-hour automatic expiry</li>
+                <li>Fast and secure</li>
+                <li>Mobile responsive</li>
+            </ul>
+            <button onclick="closeModal('aboutModal')" style="margin-top:20px; padding:10px 20px; background:#667eea; color:white; border:none; border-radius:8px; cursor:pointer;">Close</button>
+        </div>
+    </div>
+
+    <div id="privacyModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:2000; align-items:center; justify-content:center;">
+        <div style="background:white; max-width:500px; margin:20px; padding:30px; border-radius:15px; position:relative; max-height:80vh; overflow-y:auto;">
+            <button onclick="closeModal('privacyModal')" style="position:absolute; top:15px; right:15px; background:none; border:none; font-size:24px; cursor:pointer;">&times;</button>
+            <h2>Privacy Policy</h2>
+            <p style="margin-top:20px; line-height:1.6;"><strong>Last Updated:</strong> December 2024</p>
+            <p style="margin-top:15px; line-height:1.6;">At Web Notepad, we take your privacy seriously. This privacy policy explains how we handle your data.</p>
+            
+            <h3 style="margin-top:20px;">1. Data Collection</h3>
+            <p>We do not collect any personal information. All notes are stored temporarily and expire after 1 hour.</p>
+            
+            <h3 style="margin-top:15px;">2. Data Storage</h3>
+            <p>Notes are stored locally and automatically deleted after 1 hour. No permanent storage of your content.</p>
+            
+            <h3 style="margin-top:15px;">3. Cookies</h3>
+            <p>We use only essential cookies for functionality. No tracking cookies are used.</p>
+            
+            <h3 style="margin-top:15px;">4. Third Parties</h3>
+            <p>We do not share any data with third parties.</p>
+            
+            <h3 style="margin-top:15px;">5. Your Rights</h3>
+            <p>You have full control over your notes. Delete them anytime or let them expire automatically.</p>
+            
+            <button onclick="closeModal('privacyModal')" style="margin-top:20px; padding:10px 20px; background:#667eea; color:white; border:none; border-radius:8px; cursor:pointer;">Close</button>
+        </div>
+    </div>
+
+    <script>
+        const codeInput = document.getElementById('codeInput');
+        const accessBtn = document.getElementById('accessBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const messageDiv = document.getElementById('message');
+        
+        let currentCode = '';
+        
+        function updateInput() {
+            codeInput.value = currentCode;
+        }
+        
+        function clearCode() {
+            currentCode = '';
+            updateInput();
+            hideMessage();
+            codeInput.classList.remove('error');
+            codeInput.focus();
+        }
+        
+        function hideMessage() {
+            messageDiv.className = 'message';
+            messageDiv.style.display = 'none';
+        }
+        
+        function showMessage(text, type) {
+            messageDiv.textContent = text;
+            messageDiv.className = `message ${type}`;
+            messageDiv.style.display = 'block';
+            
+            if (type === 'error') {
+                codeInput.classList.add('error');
+                setTimeout(() => {
+                    codeInput.classList.remove('error');
+                }, 500);
+            } else {
+                codeInput.classList.remove('error');
+            }
+        }
+        
+        async function accessNote() {
+            const code = currentCode.trim();
+            
+            if (code.length !== 6) {
+                showMessage(`Please enter a 6-digit code (current: ${code.length} digits)`, 'error');
+                return;
+            }
+            
+            // Validate that it's all digits
+            if (!/^\d{6}$/.test(code)) {
+                showMessage('Code must contain only digits 0-9', 'error');
+                return;
+            }
+            
+            // Show loading state
+            const originalText = accessBtn.textContent;
+            accessBtn.disabled = true;
+            accessBtn.innerHTML = '<span class="loading"></span> Accessing...';
+            
+            try {
+                const response = await fetch('/api/access', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ code: code })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok && data.success) {
+                    // Store the note data in sessionStorage for the shared page
+                    sessionStorage.setItem('shared_note', JSON.stringify(data.note));
+                    sessionStorage.setItem('share_code', data.code);
+                    
+                    showMessage('Access granted! Redirecting...', 'success');
+                    
+                    // Redirect to the shared view
+                    setTimeout(() => {
+                        window.location.href = `/note/${data.code}`;
+                    }, 1000);
+                } else {
+                    showMessage(data.error || 'Invalid code. Please try again.', 'error');
+                    clearCode();
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showMessage('Network error. Please try again.', 'error');
+            } finally {
+                accessBtn.disabled = false;
+                accessBtn.textContent = originalText;
+            }
+        }
+        
+        // Modal functions
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+        
+        // Event listeners for footer links
+        document.getElementById('aboutLink').addEventListener('click', (e) => {
+            e.preventDefault();
+            openModal('aboutModal');
+        });
+        
+        document.getElementById('privacyLink').addEventListener('click', (e) => {
+            e.preventDefault();
+            openModal('privacyModal');
+        });
+        
+        // Close modals when clicking outside
+        window.addEventListener('click', (e) => {
+            if (e.target.id === 'aboutModal') closeModal('aboutModal');
+            if (e.target.id === 'privacyModal') closeModal('privacyModal');
+        });
+        
+        // Event listeners
+        accessBtn.addEventListener('click', accessNote);
+        clearBtn.addEventListener('click', clearCode);
+        
+        codeInput.addEventListener('input', (e) => {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 6) value = value.slice(0, 6);
+            currentCode = value;
+            codeInput.value = currentCode;
+            
+            // Auto-submit when 6 digits are entered
+            if (currentCode.length === 6) {
+                accessNote();
+            }
+        });
+        
+        codeInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                accessNote();
+            }
+        });
+        
+        // Handle paste event
+        codeInput.addEventListener('paste', (e) => {
+            e.preventDefault();
+            const pasted = (e.clipboardData || window.clipboardData).getData('text');
+            const digits = pasted.replace(/\D/g, '').slice(0, 6);
+            if (digits) {
+                currentCode = digits;
+                updateInput();
+                if (currentCode.length === 6) {
+                    accessNote();
+                }
+            }
+        });
+        
+        console.log('Access page loaded - Best Online Notepad Free No Login');
+    </script>
+</body>
+</html>

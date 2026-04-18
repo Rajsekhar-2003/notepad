@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <meta name="theme-color" content="#667eea">
+    <title>Web Notepad - Free Online Notepad No Login Required | Share Online Notepad With QR code</title>
+    <meta name="description" content="Web Notepad - free online notepad no login required. Write notes, edit text, format with bold/italic, and share instantly. Best Notepad++ alternative with auto-save, download PDF/Word, and real-time sharing. No signup needed. onlinenotepad">
+    
+    <!-- Meta Keywords -->
+    <meta name="keywords" content="note pad, online text, notebook online, open notepad, online text editor, notes website, notes online free, free notepad, free notepad app, make notes online, create notepad, notebook online free, notepad download, online note taking, notepad++ online, notes online, wordpad online, document editor, online word editor, writer online, write notes online, online word document editor, document editing software, free online word editor, sentence rewriter, paraphrasing, paragraph rewriter, rewriter tool, reword generator, rewrite sentences, sentence rephraser, best paraphrasing tool, rephrase online, quillbot paraphrase, small notepad, digital notebook, mini notepad, digital notepad, writing notepad">
+    
+    <!-- Robots -->
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <meta name="googlebot" content="index, follow">
+    <meta name="bingbot" content="index, follow">
+    
+    <!-- Canonical -->
+    <link rel="canonical" href="https://webnotepad.online/">
+    
+    <!-- Alternate languages (if applicable) -->
+    <link rel="alternate" hreflang="en" href="https://webnotepad.online/">
+    <link rel="alternate" hreflang="x-default" href="https://webnotepad.online/">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Web Notepad - Free Online Notepad No Login Required ">
+    <meta property="og:description" content="Write and share notes instantly. No login, no signup. Best Notepad++ alternative with rich text formatting, auto-save, and PDF/Word download.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://webnotepad.online/">
+    <meta property="og:site_name" content="Web Notepad">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:image" content="https://webnotepad.online/static/web-notepad.png">
+    <meta property="og:image:alt" content="Web Notepad Interface - Free Online Text Editor">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Web Notepad - Free Online Notepad No Login">
+    <meta name="twitter:description" content="Best free online notepad. No registration needed. Write, format, and share text instantly.">
+    <meta name="twitter:image" content="https://webnotepad.online/static/Web-notepad.png">
+    <meta name="twitter:site" content="@webnotepad">
+    <!-- CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+
+     <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='image.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='image.png') }}">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='image.png') }}">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+        
+        .editor-card { background: white; border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); overflow: hidden; }
+        .app-header { padding: 20px 24px; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); border-bottom: 1px solid rgba(0,0,0,0.08); }
+        .toolbar { padding: 12px 20px; background: #f8f9fa; border-bottom: 1px solid #e9ecef; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+        .tool-group { display: flex; gap: 4px; padding: 0 8px; border-right: 1px solid #dee2e6; }
+        .tool-group:last-child { border-right: none; }
+        .tool-btn { background: white; border: 1px solid #dee2e6; border-radius: 8px; padding: 6px 12px; cursor: pointer; transition: all 0.2s; font-size: 14px; display: inline-flex; align-items: center; gap: 6px; }
+        .tool-btn:hover { background: #e9ecef; transform: translateY(-1px); }
+        .tool-select { padding: 6px 10px; border-radius: 8px; border: 1px solid #dee2e6; background: white; font-size: 14px; }
+        .color-picker { width: 36px; height: 36px; border-radius: 8px; border: 1px solid #dee2e6; cursor: pointer; }
+        .editor-area { display: flex; min-height: 600px; }
+        .rich-editor { flex: 1; padding: 24px; background: #fefefe; }
+        #editor { 
+            min-height: 550px; 
+            outline: none; 
+            font-size: 16px; 
+            line-height: 1.6; 
+            font-family: 'Inter', sans-serif;
+            word-wrap: break-word;
+            word-break: break-word;
+            white-space: pre-wrap;
+            overflow-wrap: break-word;
+        }
+        #editor p, #editor div, #editor span {
+            word-wrap: break-word !important;
+            word-break: break-word !important;
+            white-space: pre-wrap !important;
+            overflow-wrap: break-word !important;
+            max-width: 100% !important;
+        }
+        .sidebar { width: 350px; background: #f8f9fa; border-left: 1px solid #e9ecef; padding: 20px; display: flex; flex-direction: column; gap: 24px; overflow-y: auto; max-height: 80vh; }
+        .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        .stat-card { background: white; padding: 12px; border-radius: 12px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .stat-value { font-size: 24px; font-weight: bold; color: #667eea; }
+        .stat-label { font-size: 11px; color: #6c757d; margin-top: 4px; }
+        .download-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+        .download-btn { font-size: 13px; padding: 6px 12px; }
+        .file-list { max-height: 200px; overflow-y: auto; }
+        .file-item { background: white; padding: 8px 12px; border-radius: 8px; margin-bottom: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: all 0.2s; }
+        .file-item:hover { background: #e9ecef; transform: translateX(2px); }
+        .status-bar { padding: 8px 20px; background: #f1f3f4; border-top: 1px solid #e9ecef; display: flex; justify-content: space-between; font-size: 12px; color: #5f6368; }
+        .ai-tools { background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%); border-radius: 16px; padding: 16px 24px; margin-top: 20px; }
+        .tools-heading { font-weight: bold; margin-bottom: 12px; color: #4a5568; }
+        .tool-buttons { display: flex; flex-wrap: wrap; gap: 10px; }
+        .rewrite-btn { background: white; border: 1px solid #cbd5e0; border-radius: 20px; padding: 6px 16px; font-size: 13px; cursor: pointer; transition: all 0.2s; }
+        .rewrite-btn:hover { background: #667eea; color: white; border-color: #667eea; }
+        .footer-seo { background: #1a202c; color: #e2e8f0; padding: 40px 20px 20px; margin-top: 40px; border-radius: 24px; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; max-width: 1400px; margin: 0 auto; }
+        .footer-col h2, .footer-col h3, .footer-col h4 { color: white; margin-bottom: 15px; font-size: 1.2rem; }
+        .footer-col ul { list-style: none; padding: 0; }
+        .footer-col li { margin-bottom: 8px; font-size: 14px; }
+        .copyright { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid #2d3748; font-size: 13px; }
+        .toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 1100; }
+        .toast { background: white; border-radius: 12px; padding: 12px 20px; margin-top: 10px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); animation: slideIn 0.3s ease; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .share-modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center; }
+        .share-modal.active { display: flex; }
+        .share-modal-content { background: white; border-radius: 24px; max-width: 500px; width: 90%; padding: 28px; text-align: center; }
+        .qr-container { display: flex; justify-content: center; margin: 20px 0; padding: 15px; background: white; border-radius: 16px; }
+        .share-code { font-size: 32px; font-weight: bold; letter-spacing: 4px; background: #f1f3f4; padding: 12px; border-radius: 12px; font-family: monospace; }
+        .copy-btn { background: #667eea; color: white; border: none; border-radius: 40px; padding: 10px 24px; cursor: pointer; margin-top: 15px; }
+        .warning-banner { background: #fff3cd; border-left: 4px solid #ffc107; padding: 12px 20px; margin: 10px 20px; border-radius: 8px; display: flex; align-items: center; gap: 10px; }
+        .warning-banner i { color: #ffc107; font-size: 20px; }
+        
+        /* History Section Styles */
+        .history-section { margin-top: 10px; }
+        .history-list { max-height: 300px; overflow-y: auto; }
+        .history-item {
+            background: white;
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 10px;
+            transition: all 0.2s ease;
+            border: 1px solid #e9ecef;
+            cursor: pointer;
+        }
+        .history-item:hover {
+            transform: translateX(4px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-color: #667eea;
+        }
+        .history-code {
+            font-family: monospace;
+            font-weight: bold;
+            color: #667eea;
+            font-size: 14px;
+        }
+        .history-preview {
+            font-size: 12px;
+            color: #6c757d;
+            margin-top: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .history-stats {
+            display: flex;
+            gap: 10px;
+            margin-top: 8px;
+            font-size: 11px;
+            color: #adb5bd;
+        }
+        .history-stats i { margin-right: 3px; }
+        .history-actions { display: flex; gap: 8px; margin-top: 8px; }
+        .history-actions button { font-size: 11px; padding: 4px 8px; }
+        .delete-history-btn {
+            color: #dc3545;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .delete-history-btn:hover { color: #c82333; }
+        
+        @media (max-width: 768px) { 
+            .editor-area { flex-direction: column; } 
+            .sidebar { width: 100%; max-height: none; } 
+            .tool-group { flex-wrap: wrap; } 
+        }
+
+        /* Header Styles */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #667eea;
+        }
+
+        .nav-links a.active {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+
+    </style>
+</head>
+<body>
+ <header class="header">
+        <div class="nav-container">
+            <div class="logo"><img src="{{ url_for('static', filename='image.png') }}"
+                 alt="OmeBox Logo"
+                 height="48"
+                 width="48"
+                 class="logo me-2">Web Notepad</div>
+
+
+            <div class="nav-links">
+                <a href="/" class="active">🏠 Home</a>
+                <a href="/access" >📥 Receiver</a>
+                <a href="/about">📖 About</a>
+            </div>
+        </div>
+    </header>
+    <div class="editor-card">
+        <div class="app-header d-flex justify-content-between align-items-center flex-wrap">
+            <div>
+               <h1 class="h3 mb-0 fw-bold">
+                    <i class="bi bi-journal-bookmark-fill me-2"></i>
+                    Web Online Notepad – Free Notes Online, No Login Required
+                </h1>
+                <p class="small opacity-75 mb-0 mt-1">Advanced Rich Text Editor • Auto-Save • Multiple Exports • Share with QR Code</p>
+            </div>
+            <div class="mt-2 mt-sm-0">
+                <span class="badge bg-white text-dark px-3 py-2 rounded-pill me-2">
+                    <i class="bi bi-cloud-check"></i> Auto-Save
+                </span>
+                <button class="btn btn-primary ms-2" id="shareNoteBtn"><i class="bi bi-share-fill"></i> Share</button>
+                <button class="btn btn-outline-danger ms-2" id="forceSaveBtn"><i class="bi bi-save-fill"></i> Force Save</button>
+            </div>
+        </div>
+
+        <div class="toolbar">
+            <div class="tool-group">
+                <button class="tool-btn" data-cmd="bold" title="Bold (Ctrl+B)"><i class="bi bi-type-bold"></i> Bold</button>
+                <button class="tool-btn" data-cmd="italic" title="Italic (Ctrl+I)"><i class="bi bi-type-italic"></i> Italic</button>
+                <button class="tool-btn" data-cmd="underline" title="Underline (Ctrl+U)"><i class="bi bi-type-underline"></i> Underline</button>
+                <button class="tool-btn" data-cmd="strikeThrough" title="Strikethrough"><i class="bi bi-type-strikethrough"></i></button>
+            </div>
+            <div class="tool-group">
+                <select id="fontFamily" class="tool-select">
+                    <option value="Inter">Inter</option><option value="Arial">Arial</option>
+                    <option value="Times New Roman">Times New Roman</option>
+                    <option value="Courier New">Courier New</option>
+                </select>
+                <select id="fontSize" class="tool-select">
+                    <option value="12px">12px</option><option value="14px">14px</option>
+                    <option value="16px" selected>16px</option>
+                    <option value="20px">20px</option><option value="24px">24px</option>
+                </select>
+            </div>
+            <div class="tool-group">
+                <button class="tool-btn" data-cmd="justifyLeft"><i class="bi bi-text-left"></i></button>
+                <button class="tool-btn" data-cmd="justifyCenter"><i class="bi bi-text-center"></i></button>
+                <button class="tool-btn" data-cmd="justifyRight"><i class="bi bi-text-right"></i></button>
+            </div>
+            <div class="tool-group">
+                <input type="color" id="textColor" class="color-picker" value="#000000">
+                <input type="color" id="bgColor" class="color-picker" value="#fff9c4">
+            </div>
+            <div class="tool-group">
+                <button class="tool-btn" data-cmd="insertUnorderedList"><i class="bi bi-list-ul"></i></button>
+                <button class="tool-btn" data-cmd="insertOrderedList"><i class="bi bi-list-ol"></i></button>
+                <button class="tool-btn" id="insertLinkBtn"><i class="bi bi-link-45deg"></i></button>
+                <button class="tool-btn" id="insertImageBtn"><i class="bi bi-image"></i></button>
+            </div>
+            <div class="tool-group">
+                <button class="tool-btn" id="undoBtn"><i class="bi bi-arrow-return-left"></i> Undo</button>
+                <button class="tool-btn" id="redoBtn"><i class="bi bi-arrow-return-right"></i> Redo</button>
+            </div>
+            <div class="tool-group">
+                <button class="tool-btn" id="clearAllBtn"><i class="bi bi-trash"></i> Clear</button>
+                <button class="tool-btn" id="uploadBtn"><i class="bi bi-upload"></i> Upload</button>
+                <input type="file" id="fileInput" style="display: none;" accept=".txt,.html,.md">
+            </div>
+        </div>
+
+        <div class="editor-area">
+            <main class="rich-editor" id="main-editor">
+                <div id="editor" contenteditable="true" role="textbox" aria-label="Rich text editor"></div>
+            </main>
+
+            <aside class="sidebar">
+                <div>
+                    <h6 class="fw-bold mb-3"><i class="bi bi-download me-2 text-primary"></i>Export Document</h6>
+                    <div class="download-grid">
+                        <button class="btn btn-success download-btn" id="exportPDF"><i class="bi bi-filetype-pdf"></i> PDF</button>
+                        <button class="btn btn-primary download-btn" id="exportWord"><i class="bi bi-filetype-docx"></i> Word</button>
+                        <button class="btn btn-info download-btn" id="exportHTML"><i class="bi bi-filetype-html"></i> HTML</button>
+                        <button class="btn btn-secondary download-btn" id="exportTXT"><i class="bi bi-filetype-txt"></i> TXT</button>
+                        <button class="btn btn-warning download-btn" id="exportMD"><i class="bi bi-markdown"></i> MD</button>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card"><div class="stat-value" id="charCount">0</div><div class="stat-label">Characters</div></div>
+                    <div class="stat-card"><div class="stat-value" id="wordCount">0</div><div class="stat-label">Words</div></div>
+                    <div class="stat-card"><div class="stat-value" id="lineCount">0</div><div class="stat-label">Lines</div></div>
+                    <div class="stat-card"><div class="stat-value" id="readingTime">0</div><div class="stat-label">Min Read</div></div>
+                </div>
+
+                <!-- Share History Section -->
+                <div class="history-section">
+                    <h6 class="fw-bold mb-3">
+                        <i class="bi bi-clock-history me-2 text-primary"></i>
+                        Share History 
+                        <span id="historyCount" class="badge bg-secondary">0</span>
+                    </h6>
+                    <div id="shareHistoryList" class="history-list">
+                        <div class="text-muted text-center py-3">
+                            <i class="bi bi-inbox"></i>
+                            <p class="small mt-2">No shares yet. Create your first share!</p>
+                        </div>
+                    </div>
+                    <button class="btn btn-outline-danger btn-sm w-100 mt-2" id="clearHistoryBtn" style="display: none;">
+                        <i class="bi bi-trash"></i> Clear All History
+                    </button>
+                </div>
+
+                <div>
+                    <h6 class="fw-bold mb-3"><i class="bi bi-folder2-open me-2 text-primary"></i>Saved Notes</h6>
+                    <div class="file-list" id="fileList"></div>
+                </div>
+
+                <div>
+                    <input type="text" class="form-control form-control-sm mb-2" id="noteName" placeholder="Enter note name...">
+                    <button class="btn btn-primary btn-sm w-100" id="saveNewNoteBtn"><i class="bi bi-plus-circle"></i> Save as New Note</button>
+                </div>
+            </aside>
+        </div>
+
+        <div class="status-bar">
+            <span id="statusMsg"><i class="bi bi-check-circle-fill text-success me-1"></i> Ready</span>
+            <span><i class="bi bi-database"></i> <span id="lastSaved">Auto-save active</span></span>
+            <span><i class="bi bi-wifi"></i> <span id="onlineStatus">Online</span></span>
+        </div>
+    </div>
+
+    <div class="ai-tools">
+        <div class="tools-heading"><span>🔄 Smart Rewriter & Paraphraser</span></div>
+        <div class="tool-buttons">
+            <button class="rewrite-btn" id="paraphraseBtn">✨ Paraphrase</button>
+            <button class="rewrite-btn" id="sentenceRewriterBtn">🖋️ Sentence Rewriter</button>
+            <button class="rewrite-btn" id="paragraphRewriterBtn">📄 Paragraph Rewriter</button>
+            <button class="rewrite-btn" id="rewordGeneratorBtn">🔁 Reword Generator</button>
+        </div>
+        <div id="rewriterStatus" style="display: none; margin-top: 10px; padding: 8px; background: #e8f0fe; border-radius: 8px;"></div>
+    </div>
+
+    <footer class="footer-seo">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h2>✏️ Online Text Editor</h2>
+                <p style="word-wrap: break-word; word-break: break-word; white-space: normal;">
+                    Web Notepad is a lightning-fast <strong>online notepad</strong> with no registration, 
+                    no login. Perfect for quick notes and document editing.
+                </p>
+            </div>
+            <div class="footer-col"><h3>📱 Cross-Platform</h3><ul><li>✅ Mac, Windows, Linux</li><li>✅ Android & iOS mobile</li><li>✅ Digital notebook experience</li></ul></div>
+            <div class="footer-col"><h4>⚙️ Paraphrasing Tools</h4><ul><li>Sentence rephraser</li><li>Paragraph rewriter</li><li>Reword generator</li><li>Best paraphrasing tool</li></ul></div>
+            <div class="footer-col"><h3>📝 Why Web Notepad?</h3><p>No signup walls. Instant open notepad. Autosave, share via QR & 6-digit code. Privacy-first.</p></div>
+        </div>
+        <div class="copyright"><p>© 2026 Web Notepad — free notepad app | online text editor | no login required | <a href="/privacy-policy">Privacy Policy</a></p></div>
+    </footer>
+</div>
+
+<!-- Share Modal -->
+<div id="shareModal" class="share-modal">
+    <div class="share-modal-content">
+        <h4><i class="bi bi-share-fill"></i> Share Your Note</h4>
+        <div class="qr-container" id="qrCodeContainer"></div>
+        <div class="share-code" id="shareCodeDisplay">------</div>
+        <p class="mt-2">Share this 6-digit code or scan QR code</p>
+        <input type="text" id="shareUrlInput" class="form-control mb-2" readonly>
+        <div class="d-flex gap-2">
+            <button class="copy-btn" id="copyShareUrlBtn">Copy Link</button>
+            <button class="copy-btn" id="copyShareCodeBtn" style="background:#28a745;">Copy Code</button>
+            <button class="copy-btn" id="closeShareModal" style="background:#6c757d;">Close</button>
+        </div>
+    </div>
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+    // ======================== PERSISTENT STORAGE WITH AUTO-SAVE ========================
+    const editor = document.getElementById('editor');
+    const statusSpan = document.getElementById('statusMsg');
+    const saveStatusSpan = document.getElementById('saveStatus');
+    let autoSaveTimer = null;
+    
+    function loadFromLocalStorage() {
+        const saved = localStorage.getItem('omebox_current_note');
+        const savedTimestamp = localStorage.getItem('omebox_current_note_timestamp');
+        
+        if (saved && saved.trim() !== '') {
+            editor.innerHTML = saved;
+            updateStats();
+            showToast('✅ Note restored from auto-save!', 'success');
+            saveStatusSpan.innerHTML = '✅ Data saved locally - will NOT be lost on refresh!';
+            
+            if (savedTimestamp) {
+                const date = new Date(parseInt(savedTimestamp));
+                document.getElementById('lastSaved').innerHTML = `Last saved: ${date.toLocaleTimeString()}`;
+            }
+        } else {
+            editor.innerHTML = '<p>Welcome to Web Notepad! Start writing your notes here...<br>Your content is automatically saved and will NOT be deleted on refresh.</p>';
+            saveToLocalStorage();
+        }
+        updateFileList();
+    }
+    
+    function saveToLocalStorage() {
+        const content = editor.innerHTML;
+        if (content && content.trim() !== '') {
+            localStorage.setItem('omebox_current_note', content);
+            localStorage.setItem('omebox_current_note_timestamp', Date.now().toString());
+            
+            const now = new Date();
+            document.getElementById('lastSaved').innerHTML = `Saved: ${now.toLocaleTimeString()}`;
+            statusSpan.innerHTML = '<i class="bi bi-check-circle-fill text-success me-1"></i> Auto-saved to browser';
+            saveStatusSpan.innerHTML = '✅ Data saved locally - will NOT be lost on refresh!';
+            
+            setTimeout(() => {
+                if (statusSpan.innerHTML.includes('Auto-saved')) 
+                    statusSpan.innerHTML = '<i class="bi bi-check-circle-fill text-success me-1"></i> Ready';
+            }, 2000);
+        }
+    }
+    
+    document.getElementById('forceSaveBtn').addEventListener('click', () => {
+        saveToLocalStorage();
+        showToast('✅ Note manually saved to browser storage!', 'success');
+    });
+    
+    function updateStats() {
+        const text = editor.innerText || '';
+        const chars = text.length;
+        const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+        const lines = editor.innerText.split(/\r\n|\r|\n/).length;
+        const readingTime = Math.max(1, Math.ceil(words / 200));
+        document.getElementById('charCount').innerText = chars;
+        document.getElementById('wordCount').innerText = words;
+        document.getElementById('lineCount').innerText = lines;
+        document.getElementById('readingTime').innerText = readingTime;
+    }
+    
+    editor.addEventListener('input', () => {
+        updateStats();
+        if (autoSaveTimer) clearTimeout(autoSaveTimer);
+        autoSaveTimer = setTimeout(saveToLocalStorage, 500);
+    });
+    
+    editor.addEventListener('blur', () => { saveToLocalStorage(); });
+    
+    document.getElementById('undoBtn').addEventListener('click', () => {
+        document.execCommand('undo');
+        saveToLocalStorage();
+        editor.focus();
+    });
+    document.getElementById('redoBtn').addEventListener('click', () => {
+        document.execCommand('redo');
+        saveToLocalStorage();
+        editor.focus();
+    });
+    
+    document.querySelectorAll('[data-cmd]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.execCommand(btn.getAttribute('data-cmd'), false, null);
+            saveToLocalStorage();
+            editor.focus();
+        });
+    });
+    
+    document.getElementById('fontFamily').addEventListener('change', (e) => {
+        document.execCommand('fontName', false, e.target.value);
+        saveToLocalStorage();
+        editor.focus();
+    });
+    document.getElementById('fontSize').addEventListener('change', (e) => {
+        document.execCommand('fontSize', false, '7');
+        const fontElements = document.querySelectorAll('font[size="7"]');
+        fontElements.forEach(el => { el.style.fontSize = e.target.value; el.removeAttribute('size'); });
+        saveToLocalStorage();
+        editor.focus();
+    });
+    
+    document.getElementById('textColor').addEventListener('input', (e) => {
+        document.execCommand('foreColor', false, e.target.value);
+        editor.focus();
+    });
+    document.getElementById('bgColor').addEventListener('input', (e) => {
+        document.execCommand('backColor', false, e.target.value);
+        editor.focus();
+    });
+    
+    document.getElementById('insertLinkBtn').addEventListener('click', () => {
+        const url = prompt('Enter URL:', 'https://');
+        if (url) document.execCommand('createLink', false, url);
+        saveToLocalStorage();
+    });
+    document.getElementById('insertImageBtn').addEventListener('click', () => {
+        const url = prompt('Enter image URL:', 'https://');
+        if (url) document.execCommand('insertImage', false, url);
+        saveToLocalStorage();
+    });
+    
+    document.getElementById('clearAllBtn').addEventListener('click', () => {
+        if (confirm('⚠️ Clear all content? This action cannot be undone!')) { 
+            editor.innerHTML = ''; 
+            updateStats(); 
+            saveToLocalStorage();
+            showToast('Content cleared', 'warning');
+        }
+    });
+    
+    document.getElementById('uploadBtn').addEventListener('click', () => document.getElementById('fileInput').click());
+    document.getElementById('fileInput').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+            editor.innerHTML = ev.target.result;
+            updateStats(); 
+            saveToLocalStorage(); 
+            showToast('File loaded successfully!', 'success');
+        };
+        reader.readAsText(file);
+    });
+    
+    // Export functions
+    document.getElementById('exportTXT').addEventListener('click', () => {
+        const blob = new Blob([editor.innerText], {type: 'text/plain'});
+        saveAs(blob, `omebox_note_${Date.now()}.txt`);
+        showToast('TXT exported!', 'success');
+    });
+    
+    document.getElementById('exportHTML').addEventListener('click', () => {
+        const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>OmeBox Note</title><style>body{font-family:'Inter',Arial,sans-serif;padding:40px;max-width:800px;margin:0 auto;line-height:1.6;}p,div,span{word-wrap:break-word;word-break:break-word;white-space:normal;}</style></head><body>${editor.innerHTML}</body></html>`;
+        const blob = new Blob([html], {type: 'text/html'});
+        saveAs(blob, `omebox_note_${Date.now()}.html`);
+        showToast('HTML exported!', 'success');
+    });
+    
+    document.getElementById('exportMD').addEventListener('click', () => {
+        const blob = new Blob([`# OmeBox Note\n\n${editor.innerText}`], {type: 'text/markdown'});
+        saveAs(blob, `omebox_note_${Date.now()}.md`);
+        showToast('Markdown exported!', 'success');
+    });
+    
+    document.getElementById('exportPDF').addEventListener('click', () => {
+        const element = editor.cloneNode(true);
+        element.style.padding = '40px';
+        element.style.fontFamily = 'Inter, Arial, sans-serif';
+        element.style.lineHeight = '1.6';
+        element.style.wordWrap = 'break-word';
+        const opt = { margin: [0.5,0.5,0.5,0.5], filename: `omebox_${Date.now()}.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } };
+        html2pdf().set(opt).from(element).save();
+        showToast('PDF exporting...', 'info');
+    });
+    
+    document.getElementById('exportWord').addEventListener('click', () => {
+        const blob = new Blob([`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>OmeBox Note</title><style>body{font-family:'Inter',Arial,sans-serif;padding:40px;line-height:1.6;}p,div,span{word-wrap:break-word;}</style></head><body>${editor.innerHTML}</body></html>`], {type: 'application/msword'});
+        saveAs(blob, `omebox_${Date.now()}.doc`);
+        showToast('Word document exported!', 'success');
+    });
+    
+    // Saved notes management
+    function updateFileList() {
+        const files = JSON.parse(localStorage.getItem('omebox_saved_notes') || '{}');
+        const container = document.getElementById('fileList');
+        container.innerHTML = '';
+        Object.entries(files).forEach(([name, content]) => {
+            const div = document.createElement('div');
+            div.className = 'file-item';
+            div.innerHTML = `<span><i class="bi bi-file-text"></i> ${name}</span><span><i class="bi bi-trash text-danger" data-name="${name}" style="cursor:pointer"></i></span>`;
+            div.addEventListener('click', (e) => {
+                if (e.target.classList.contains('text-danger')) return;
+                editor.innerHTML = content;
+                updateStats(); 
+                saveToLocalStorage();
+                showToast(`Loaded: ${name}`, 'info');
+            });
+            div.querySelector('.text-danger')?.addEventListener('click', (e) => {
+                e.stopPropagation();
+                delete files[name];
+                localStorage.setItem('omebox_saved_notes', JSON.stringify(files));
+                updateFileList();
+                showToast(`Deleted ${name}`, 'warning');
+            });
+            container.appendChild(div);
+        });
+    }
+    
+    document.getElementById('saveNewNoteBtn').addEventListener('click', () => {
+        let name = document.getElementById('noteName').value.trim();
+        if (!name) name = `note_${Date.now()}`;
+        const files = JSON.parse(localStorage.getItem('omebox_saved_notes') || '{}');
+        files[name] = editor.innerHTML;
+        localStorage.setItem('omebox_saved_notes', JSON.stringify(files));
+        updateFileList();
+        document.getElementById('noteName').value = '';
+        showToast(`✅ Saved as "${name}"`, 'success');
+    });
+    
+    // Paraphrasing functions
+    function simpleParaphrase(text) {
+        const replacements = { 'good': 'excellent', 'bad': 'poor', 'happy': 'joyful', 'sad': 'melancholy', 'big': 'large', 'small': 'tiny', 'quick': 'fast', 'smart': 'intelligent', 'beautiful': 'gorgeous', 'important': 'crucial', 'different': 'unique' };
+        let paraphrased = text;
+        for (const [word, replacement] of Object.entries(replacements)) {
+            const regex = new RegExp(`\\b${word}\\b`, 'gi');
+            paraphrased = paraphrased.replace(regex, replacement);
+        }
+        return paraphrased;
+    }
+    
+    function applyRewrite(action) {
+        const selection = window.getSelection();
+        let textToRewrite = '';
+        let range = null;
+        if (selection.rangeCount > 0 && !selection.isCollapsed) {
+            range = selection.getRangeAt(0);
+            textToRewrite = range.toString();
+        } else {
+            textToRewrite = editor.innerText;
+        }
+        if (!textToRewrite.trim()) { showToast('No text to rewrite', 'error'); return; }
+        
+        let rewritten = '';
+        if (action === 'paraphrase') rewritten = simpleParaphrase(textToRewrite);
+        else if (action === 'sentence') rewritten = textToRewrite.split('. ').map(s => s.charAt(0).toLowerCase() + s.slice(1)).join('. ');
+        else if (action === 'paragraph') rewritten = textToRewrite.split('\n').map(p => p.trim()).join('\n\n');
+        else rewritten = textToRewrite.split(' ').reverse().join(' ');
+        
+        const statusDiv = document.getElementById('rewriterStatus');
+        statusDiv.style.display = 'block';
+        statusDiv.innerHTML = `<i class="bi bi-stars"></i> ✨ Rewritten! Preview: "${rewritten.substring(0, 100)}..."`;
+        setTimeout(() => statusDiv.style.display = 'none', 3000);
+        
+        if (range) {
+            range.deleteContents();
+            range.insertNode(document.createTextNode(rewritten));
+            range.collapse(false);
+        } else {
+            editor.innerText = rewritten;
+        }
+        updateStats(); 
+        saveToLocalStorage();
+        showToast('Text rewritten!', 'success');
+    }
+    
+    document.getElementById('paraphraseBtn').addEventListener('click', () => applyRewrite('paraphrase'));
+    document.getElementById('sentenceRewriterBtn').addEventListener('click', () => applyRewrite('sentence'));
+    document.getElementById('paragraphRewriterBtn').addEventListener('click', () => applyRewrite('paragraph'));
+    document.getElementById('rewordGeneratorBtn').addEventListener('click', () => applyRewrite('reword'));
+    
+    // ======================== SHARE FUNCTIONALITY WITH HISTORY ========================
+    const shareModal = document.getElementById('shareModal');
+    const shareCodeDisplay = document.getElementById('shareCodeDisplay');
+    const shareUrlInput = document.getElementById('shareUrlInput');
+    let currentShareCode = '';
+    
+    async function createShare() {
+        const content = editor.innerText;
+        const html = editor.innerHTML;
+        const title = prompt('Enter a title for this note (optional):', 'My Shared Note');
+        
+        if (!content.trim()) {
+            showToast('Nothing to share! Write something first.', 'error');
+            return;
+        }
+        
+        showToast('Creating share link...', 'info');
+        try {
+            const response = await fetch('/share', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    content: content, 
+                    html: html,
+                    title: title || 'Shared Note'
+                })
+            });
+            const data = await response.json();
+            if (data.success) {
+                currentShareCode = data.share_code;
+                shareCodeDisplay.innerText = currentShareCode;
+                shareUrlInput.value = data.share_url;
+                
+                document.getElementById('qrCodeContainer').innerHTML = '';
+                new QRCode(document.getElementById('qrCodeContainer'), {
+                    text: data.share_url,
+                    width: 180,
+                    height: 180,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+                
+                shareModal.classList.add('active');
+                showToast('Share created!', 'success');
+                
+                // Refresh history
+                setTimeout(() => {
+                    if (typeof loadShareHistory === 'function') {
+                        loadShareHistory();
+                    }
+                }, 500);
+            } else {
+                showToast('Failed to create share', 'error');
+            }
+        } catch (err) {
+            console.error(err);
+            showToast('Error creating share', 'error');
+        }
+    }
+    
+    document.getElementById('shareNoteBtn').addEventListener('click', createShare);
+    document.getElementById('copyShareUrlBtn').addEventListener('click', () => {
+        shareUrlInput.select();
+        document.execCommand('copy');
+        showToast('Link copied!', 'success');
+    });
+    document.getElementById('copyShareCodeBtn').addEventListener('click', () => {
+        navigator.clipboard.writeText(currentShareCode);
+        showToast('Code copied: ' + currentShareCode, 'success');
+    });
+    document.getElementById('closeShareModal').addEventListener('click', () => {
+        shareModal.classList.remove('active');
+    });
+    
+    // ======================== SHARE HISTORY FUNCTIONS ========================
+    async function loadShareHistory() {
+        try {
+            const response = await fetch('/api/history');
+            const data = await response.json();
+            
+            if (data.success && data.history && data.history.length > 0) {
+                displayHistory(data.history);
+                document.getElementById('historyCount').textContent = data.history.length;
+                document.getElementById('clearHistoryBtn').style.display = 'block';
+            } else {
+                document.getElementById('shareHistoryList').innerHTML = `
+                    <div class="text-muted text-center py-3">
+                        <i class="bi bi-inbox"></i>
+                        <p class="small mt-2">No shares yet. Create your first share!</p>
+                    </div>
+                `;
+                document.getElementById('historyCount').textContent = '0';
+                document.getElementById('clearHistoryBtn').style.display = 'none';
+            }
+        } catch (error) {
+            console.error('Error loading history:', error);
+        }
+    }
+    
+    function displayHistory(history) {
+        const container = document.getElementById('shareHistoryList');
+        container.innerHTML = '';
+        
+        history.forEach(item => {
+            const createdDate = new Date(item.created_at).toLocaleDateString();
+            const createdTime = new Date(item.created_at).toLocaleTimeString();
+            
+            const div = document.createElement('div');
+            div.className = 'history-item';
+            div.innerHTML = `
+                <div class="d-flex justify-content-between align-items-start">
+                    <div style="flex: 1;">
+                        <div class="history-code">
+                            <i class="bi bi-link-45deg"></i> ${item.share_code}
+                        </div>
+                        <div class="history-preview" title="${item.preview || ''}">
+                            ${item.preview || 'No preview available'}
+                        </div>
+                        <div class="history-stats">
+                            <span><i class="bi bi-eye"></i> ${item.views || 0} views</span>
+                            <span><i class="bi bi-calendar"></i> ${createdDate}</span>
+                            <span><i class="bi bi-clock"></i> ${createdTime}</span>
+                        </div>
+                        <div class="history-actions">
+                            <button class="btn btn-sm btn-outline-primary view-history-btn" data-code="${item.share_code}">
+                                <i class="bi bi-eye"></i> View
+                            </button>
+                            <button class="btn btn-sm btn-outline-success copy-history-link-btn" data-url="${window.location.origin}${item.share_url}">
+                                <i class="bi bi-link"></i> Copy Link
+                            </button>
+                            <button class="delete-history-btn" data-code="${item.share_code}" title="Delete from history">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            div.querySelector('.view-history-btn').addEventListener('click', (e) => {
+                e.stopPropagation();
+                window.open(`${window.location.origin}/note/${item.share_code}`, '_blank');
+            });
+            
+            div.querySelector('.copy-history-link-btn').addEventListener('click', async (e) => {
+                e.stopPropagation();
+                const url = e.currentTarget.getAttribute('data-url');
+                await navigator.clipboard.writeText(url);
+                showToast('Link copied to clipboard!', 'success');
+            });
+            
+            div.querySelector('.delete-history-btn').addEventListener('click', async (e) => {
+                e.stopPropagation();
+                if (confirm('Delete this from history?')) {
+                    try {
+                        const response = await fetch(`/api/history/${item.share_code}`, { method: 'DELETE' });
+                        if (response.ok) {
+                            showToast('Deleted from history', 'success');
+                            loadShareHistory();
+                        }
+                    } catch (error) {
+                        showToast('Error deleting', 'error');
+                    }
+                }
+            });
+            
+            div.addEventListener('click', () => {
+                window.open(`${window.location.origin}/note/${item.share_code}`, '_blank');
+            });
+            
+            container.appendChild(div);
+        });
+    }
+    
+    document.getElementById('clearHistoryBtn')?.addEventListener('click', async () => {
+        if (confirm('⚠️ Clear ALL share history? This cannot be undone!')) {
+            try {
+                const response = await fetch('/api/history/clear', { method: 'POST' });
+                if (response.ok) {
+                    showToast('All history cleared', 'success');
+                    loadShareHistory();
+                }
+            } catch (error) {
+                showToast('Error clearing history', 'error');
+            }
+        }
+    });
+    
+    function showToast(message, type = 'info') {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        const bgColor = type === 'success' ? '#d4edda' : type === 'error' ? '#f8d7da' : '#d1ecf1';
+        toast.style.backgroundColor = bgColor;
+        toast.innerHTML = `<i class="bi bi-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'} me-2"></i>${message}`;
+        container.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
+    
+    window.addEventListener('online', () => document.getElementById('onlineStatus').innerHTML = '<i class="bi bi-wifi"></i> Online');
+    window.addEventListener('offline', () => document.getElementById('onlineStatus').innerHTML = '<i class="bi bi-wifi-off"></i> Offline');
+    
+    document.addEventListener('keydown', (e) => {
+        if (e.ctrlKey && e.key === 's') { 
+            e.preventDefault(); 
+            saveToLocalStorage(); 
+            showToast('✅ Note saved to browser!', 'success'); 
+        }
+        if (e.ctrlKey && e.key === 'z') { e.preventDefault(); document.execCommand('undo'); saveToLocalStorage(); }
+        if (e.ctrlKey && e.key === 'y') { e.preventDefault(); document.execCommand('redo'); saveToLocalStorage(); }
+    });
+    
+    window.addEventListener('beforeunload', () => { saveToLocalStorage(); });
+    
+    // Initialize
+    loadFromLocalStorage();
+    updateStats();
+    loadShareHistory();
+    
+    console.log('✅ Notepad loaded - Share history feature active!');
+</script>
+</body>
+</html>
