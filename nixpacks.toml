@@ -13,4 +13,4 @@ cmds = [
 cmds = ["echo Build complete"]
 
 [start]
-cmd = "gunicorn app:app --bind 0.0.0.0:3000 --workers 1 --threads 2"
+cmd = "gunicorn app:app --bind 0.0.0.0:8080 --workers 1 --threads 2"
