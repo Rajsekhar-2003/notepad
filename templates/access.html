@@ -227,20 +227,22 @@
         .subtitle { text-align: center; color: #666; margin-bottom: 30px; font-size: 14px; }
 
         .code-input-container { margin-bottom: 25px; }
-
-        .code-input {
-            width: 100%;
-            padding: 15px;
-            font-size: 32px;
-            text-align: center;
-            letter-spacing: 10px;
-            font-weight: bold;
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            transition: all 0.3s;
-            font-family: 'Courier New', monospace;
-            background: #fafafa;
-        }
+.code-input {
+    width: 100%;
+    padding: 15px;
+    font-size: 32px;
+    text-align: center;
+    letter-spacing: 10px;
+    font-weight: bold;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    transition: all 0.3s;
+    font-family: 'Courier New', monospace;
+    background: #fafafa;
+    color: #111;
+    -webkit-text-fill-color: #111;
+    caret-color: #667eea;
+}
 
         .code-input:focus {
             outline: none;
@@ -341,7 +343,7 @@
     <!-- Header -->
     <header class="header">
         <div class="nav-container">
-            <div class="logo"><img src="{{ url_for('static', filename='image.png') }}" alt="Web Notepad Logo - Free Online Notepad" height="48" width="48" class="me-2">Web Notepad</div>
+            <div class="logo"> <img src="{{ url_for('static', filename='image.png') }}" alt="Web Notepad Logo - Free Online Notepad" height="48" width="48" class="me-2">Web Notepad</div>
             <nav class="nav-links" aria-label="Main navigation">
                 <a href="/">🏠 Home</a>
                 <a href="/access" class="active" aria-current="page">📥 Receiver</a>
@@ -518,6 +520,7 @@
         const messageDiv = document.getElementById('message');
 
         let currentCode = '';
+        let isAccessing = false;
 
         function updateInput() { codeInput.value = currentCode; }
 
@@ -547,6 +550,8 @@
         }
 
         async function accessNote() {
+            if (isAccessing) return;
+
             const code = currentCode.trim();
 
             if (code.length !== 6) {
@@ -558,6 +563,7 @@
                 return;
             }
 
+            isAccessing = true;
             const originalText = accessBtn.textContent;
             accessBtn.disabled = true;
             accessBtn.innerHTML = '<span class="loading"></span> Accessing...';
@@ -584,6 +590,7 @@
                 console.error('Error:', error);
                 showMessage('Network error. Please try again.', 'error');
             } finally {
+                isAccessing = false;
                 accessBtn.disabled = false;
                 accessBtn.textContent = originalText;
             }
@@ -603,11 +610,13 @@
         accessBtn.addEventListener('click', accessNote);
         clearBtn.addEventListener('click', clearCode);
 
+        // Single unified input handler — works for typing, paste, and OTP autofill
         codeInput.addEventListener('input', (e) => {
             let value = e.target.value.replace(/\D/g, '');
             if (value.length > 6) value = value.slice(0, 6);
             currentCode = value;
             codeInput.value = currentCode;
+            hideMessage();
             if (currentCode.length === 6) accessNote();
         });
 
@@ -615,18 +624,7 @@
             if (e.key === 'Enter') accessNote();
         });
 
-        codeInput.addEventListener('paste', (e) => {
-            e.preventDefault();
-            const pasted = (e.clipboardData || window.clipboardData).getData('text');
-            const digits = pasted.replace(/\D/g, '').slice(0, 6);
-            if (digits) {
-                currentCode = digits;
-                updateInput();
-                if (currentCode.length === 6) accessNote();
-            }
-        });
-
-        console.log('✅ Access page loaded — 100% SEO optimized, JSON-LD + FAQ + PWA ready.');
+        console.log('✅ Access page loaded — paste fixed, 100% SEO optimized, JSON-LD + FAQ + PWA ready.');
     </script>
 </body>
 </html>
