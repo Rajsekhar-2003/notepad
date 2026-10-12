@@ -3,153 +3,95 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="View shared notes securely with 6-digit code. Best online notepad free no login - OmeBox">
-    <title>Shared Note - Best Online Notepad Free No Login | Web Notepad</title>
-     <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='image.png') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#667eea">
+    <meta name="color-scheme" content="light">
+
+    <!-- ================= PRIMARY SEO ================= -->
+    <title>Shared Note {{ share_code }} – Best Online Notepad Free No Login | Web Notepad</title>
+    <meta name="description" content="View shared notes securely with a 6-digit code. Best online notepad free no login. Notes expire in 1 hour. Copy, download PDF or TXT instantly.">
+    <meta name="robots" content="noindex, follow">
+    <link rel="canonical" href="https://webnotepad.online/note/{{ share_code }}">
+
+    <!-- ================= OPEN GRAPH ================= -->
+    <meta property="og:title" content="Shared Note {{ share_code }} – Web Notepad">
+    <meta property="og:description" content="View this shared note instantly. No login required. Expires in 1 hour.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://webnotepad.online/note/{{ share_code }}">
+    <meta property="og:site_name" content="Web Notepad">
+    <meta property="og:image" content="https://webnotepad.online/static/web-notepad.png">
+
+    <!-- ================= TWITTER ================= -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Shared Note {{ share_code }} – Web Notepad">
+    <meta name="twitter:description" content="View this shared note instantly. No login required.">
+
+    <!-- ================= JSON-LD ================= -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "Shared Note {{ share_code }}",
+      "url": "https://webnotepad.online/note/{{ share_code }}",
+      "isPartOf": { "@type": "WebSite", "name": "Web Notepad", "url": "https://webnotepad.online/" }
+    }
+    </script>
+
+    <!-- ================= ICONS & PWA ================= -->
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='image.png') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='image.png') }}">
     <link rel="apple-touch-icon" href="{{ url_for('static', filename='image.png') }}">
+
+    <!-- ================= FONTS & CSS ================= -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- ================= DOMPURIFY (XSS protection for note.html) ================= -->
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js" defer></script>
+
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --brand-start: #667eea;
+            --brand-end:   #764ba2;
+            --text-dark:   #1f2937;
+            --text-mid:    #4b5563;
+            --text-light:  #6b7280;
+            --bg-soft:     #f9fafb;
+            --border:      #e5e7eb;
+            --radius-lg:   24px;
+            --radius-md:   12px;
+            --shadow-lg:   0 25px 50px -12px rgba(0,0,0,0.25);
         }
-        
-        body { 
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
-            min-height: 100vh; 
-            padding: 20px; 
-            font-family: 'Inter', sans-serif;
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: linear-gradient(135deg, var(--brand-start) 0%, var(--brand-end) 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            padding: 20px;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             display: flex;
             flex-direction: column;
+            color: var(--text-dark);
+            -webkit-font-smoothing: antialiased;
         }
-        
-        .shared-container { 
-            max-width: 1000px; 
-            margin: 20px auto;
-            flex: 1;
-        }
-        
-        .shared-card { 
-            background: white; 
-            border-radius: 24px; 
-            padding: 30px; 
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); 
-        }
-        
-        .note-content { 
-            font-size: 16px; 
-            line-height: 1.6; 
-            min-height: 300px;
-            word-wrap: break-word;
-            word-break: break-word;
-            white-space: pre-wrap;
-            overflow-wrap: break-word;
-        }
-        
-        /* Style for rich text content */
-        .note-content p,
-        .note-content div,
-        .note-content span,
-        .note-content h1,
-        .note-content h2,
-        .note-content h3,
-        .note-content h4,
-        .note-content ul,
-        .note-content ol,
-        .note-content li,
-        .note-content pre,
-        .note-content code {
-            word-wrap: break-word;
-            word-break: break-word;
-            white-space: pre-wrap;
-            overflow-wrap: break-word;
-            max-width: 100%;
-        }
-        
-        .note-content pre {
-            background: #f5f5f5;
-            padding: 15px;
-            border-radius: 8px;
-            overflow-x: auto;
-            font-family: 'Courier New', monospace;
-        }
-        
-        .note-content img {
-            max-width: 100%;
-            height: auto;
-        }
-        
-        .copy-btn, .download-btn { 
-            background: #667eea; 
-            color: white; 
-            border: none; 
-            border-radius: 40px; 
-            padding: 8px 20px; 
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .copy-btn:hover, .download-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
-        }
-        
-        .alert {
-            border-radius: 12px;
-        }
-        
-        .toast-message {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #28a745;
-            color: white;
-            padding: 12px 24px;
-            border-radius: 8px;
-            z-index: 1000;
-            animation: slideIn 0.3s ease;
-        }
-        
-        @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-        
-        @keyframes slideOut {
-            from {
-                transform: translateX(0);
-                opacity: 1;
-            }
-            to {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-        }
-        
-        /* Header Styles */
+
+        /* ================= HEADER ================= */
         .header {
-            background: rgba(255, 255, 255, 0.95);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
             position: sticky;
             top: 0;
             z-index: 1000;
         }
-
         .nav-container {
             max-width: 1200px;
             margin: 0 auto;
@@ -160,243 +102,415 @@
             flex-wrap: wrap;
             gap: 1rem;
         }
-
+        .logo-container { display: flex; align-items: center; gap: 10px; }
+        .logo-img { border-radius: 12px; }
         .logo {
             font-size: 1.5rem;
-            font-weight: bold;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--brand-start), var(--brand-end));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
         }
+        .nav-links { display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            transition: color .25s;
+            font-size: .95rem;
+        }
+        .nav-links a:hover { color: var(--brand-start); }
+        .nav-links a.active { color: var(--brand-start); font-weight: 600; }
 
-        .logo-container {
+        /* ================= MAIN CARD ================= */
+        .shared-container { max-width: 1000px; margin: 24px auto; flex: 1; width: 100%; }
+        .shared-card {
+            background: #fff;
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            box-shadow: var(--shadow-lg);
+            animation: fadeUp .45s ease-out;
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .card-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .card-header-row h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
             display: flex;
             align-items: center;
             gap: 10px;
+            margin: 0;
+        }
+        .btn-create {
+            border: 2px solid var(--brand-start);
+            color: var(--brand-start);
+            background: transparent;
+            border-radius: 40px;
+            padding: 8px 18px;
+            font-weight: 600;
+            font-size: .9rem;
+            text-decoration: none;
+            transition: all .25s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-create:hover {
+            background: var(--brand-start);
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102,126,234,.35);
         }
 
-        .nav-links {
+        /* ================= INFO BAR ================= */
+        .info-bar {
             display: flex;
-            gap: 2rem;
+            flex-wrap: wrap;
+            gap: 10px 18px;
+            align-items: center;
+            background: #eef2ff;
+            color: #3730a3;
+            border-radius: var(--radius-md);
+            padding: 12px 18px;
+            font-size: .9rem;
+            margin-bottom: 24px;
+            border-left: 4px solid var(--brand-start);
+        }
+        .info-bar code {
+            background: #fff;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--brand-start);
+            letter-spacing: 1px;
+            border: 1px solid var(--border);
+        }
+        .info-bar .sep { opacity: .4; }
+
+        /* ================= NOTE CONTENT ================= */
+        .note-content {
+            font-size: 16px;
+            line-height: 1.7;
+            min-height: 200px;
+            padding: 4px 2px;
+            color: var(--text-dark);
+            word-wrap: break-word;
+            overflow-wrap: anywhere;
+        }
+        .note-content p,
+        .note-content div,
+        .note-content span,
+        .note-content h1, .note-content h2, .note-content h3, .note-content h4,
+        .note-content ul, .note-content ol, .note-content li,
+        .note-content pre, .note-content code, .note-content blockquote {
+            word-wrap: break-word;
+            overflow-wrap: anywhere;
+            max-width: 100%;
+        }
+        .note-content pre {
+            background: #f3f4f6;
+            padding: 16px;
+            border-radius: 10px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: .92rem;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            border-left: 3px solid var(--brand-start);
+        }
+        .note-content img { max-width: 100%; height: auto; border-radius: 8px; }
+        .note-content a { color: var(--brand-start); text-decoration: underline; }
+        .note-content blockquote {
+            border-left: 4px solid var(--brand-start);
+            padding-left: 14px;
+            color: var(--text-mid);
+            margin: 12px 0;
+        }
+
+        /* ================= BUTTONS ================= */
+        .action-row {
+            display: flex;
+            justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
+            gap: 14px;
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
         }
+        .button-group { display: flex; gap: 10px; flex-wrap: wrap; }
 
-        .nav-links a {
-            text-decoration: none;
-            color: #333;
+        .action-btn {
+            border: none;
+            border-radius: 40px;
+            padding: 9px 18px;
+            font-size: .88rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform .2s, box-shadow .2s, opacity .2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            color: #fff;
+            background: var(--brand-start);
+            line-height: 1;
+        }
+        .action-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px rgba(0,0,0,.18);
+        }
+        .action-btn:disabled { opacity: .65; cursor: wait; }
+        .action-btn.green  { background: #10b981; }
+        .action-btn.cyan   { background: #06b6d4; }
+        .action-btn.red    { background: #ef4444; }
+        .action-btn.gray   { background: #6b7280; }
+
+        .meta-info {
+            font-size: .82rem;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .meta-info i { color: var(--brand-start); }
+
+        /* ================= TOAST ================= */
+        .toast-message {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #10b981;
+            color: #fff;
+            padding: 13px 22px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,.2);
+            z-index: 5000;
             font-weight: 500;
-            transition: color 0.3s;
+            font-size: .92rem;
+            animation: slideIn .3s ease;
+            max-width: calc(100vw - 48px);
         }
+        .toast-message.error { background: #ef4444; }
+        @keyframes slideIn { from { transform: translateX(120%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(120%); opacity: 0; } }
 
-        .nav-links a:hover {
-            color: #667eea;
+        /* ================= MODALS ================= */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, .75);
+            z-index: 3000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(3px);
         }
-
-        .nav-links a.active {
-            color: #667eea;
+        .modal-overlay.active { display: flex; animation: fadeIn .2s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .modal-box {
+            background: #fff;
+            max-width: 540px;
+            width: 100%;
+            padding: 32px;
+            border-radius: 18px;
+            position: relative;
+            max-height: 85vh;
+            overflow-y: auto;
+            animation: scaleIn .25s ease;
+        }
+        @keyframes scaleIn { from { transform: scale(.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .modal-close {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            background: #f3f4f6;
+            border: none;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--text-mid);
+            line-height: 1;
+            transition: background .2s;
+        }
+        .modal-close:hover { background: #e5e7eb; }
+        .modal-box h2 { margin-bottom: 14px; font-size: 1.35rem; }
+        .modal-box h3 { margin: 18px 0 8px; font-size: 1.05rem; color: var(--text-mid); }
+        .modal-box p, .modal-box li { line-height: 1.65; color: var(--text-mid); font-size: .95rem; }
+        .modal-box ul { margin-left: 20px; margin-top: 8px; }
+        .btn-modal-close {
+            margin-top: 22px;
+            padding: 10px 22px;
+            background: linear-gradient(135deg, var(--brand-start), var(--brand-end));
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
             font-weight: 600;
         }
 
-        /* Footer Styles */
+        /* ================= FOOTER ================= */
         .footer {
-            background: #1a1a2e;
+            background: #111827;
             color: #fff;
             padding: 3rem 2rem 1rem;
             margin-top: auto;
         }
-
         .footer-container {
             max-width: 1200px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 2rem;
         }
-
-        .footer-section h3 {
-            margin-bottom: 1rem;
-            font-size: 1.2rem;
-        }
-
-        .footer-section p {
-            color: #aaa;
-            line-height: 1.6;
-        }
-
-        .footer-section ul {
-            list-style: none;
-        }
-
-        .footer-section ul li {
-            margin-bottom: 0.5rem;
-        }
-
+        .footer-section h3 { margin-bottom: 1rem; font-size: 1.1rem; }
+        .footer-section p { color: #9ca3af; line-height: 1.65; font-size: .9rem; }
+        .footer-section ul { list-style: none; }
+        .footer-section ul li { margin-bottom: .55rem; }
         .footer-section ul li a {
-            color: #aaa;
+            color: #9ca3af;
             text-decoration: none;
-            transition: color 0.3s;
+            transition: color .25s;
+            font-size: .9rem;
         }
-
-        .footer-section ul li a:hover {
-            color: #667eea;
-        }
-
+        .footer-section ul li a:hover { color: var(--brand-start); }
         .footer-bottom {
             text-align: center;
             padding-top: 2rem;
             margin-top: 2rem;
-            border-top: 1px solid #333;
-            color: #aaa;
-            font-size: 0.9rem;
+            border-top: 1px solid #374151;
+            color: #9ca3af;
+            font-size: .85rem;
         }
 
-        /* Loading spinner for PDF */
+        /* ================= SPINNER ================= */
         .loading-spinner {
             display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,.3);
+            width: 15px;
+            height: 15px;
+            border: 2px solid rgba(255,255,255,.35);
             border-radius: 50%;
-            border-top-color: white;
-            animation: spin 1s ease-in-out infinite;
+            border-top-color: #fff;
+            animation: spin .8s linear infinite;
         }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* PDF Export Styles - Hidden but used for PDF generation */
-        .pdf-export-container {
-            position: fixed;
-            top: -9999px;
-            left: -9999px;
-            width: 800px;
-            background: white;
-            padding: 40px;
-            font-family: Arial, sans-serif;
-            z-index: -1;
-        }
-        
-        .pdf-export-container * {
-            visibility: visible;
-        }
-
+        /* ================= RESPONSIVE ================= */
         @media (max-width: 768px) {
-            .shared-card {
-                padding: 20px;
-            }
-            
-            .d-flex {
-                flex-direction: column;
-                gap: 15px;
-            }
-            
-            .nav-container {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            .nav-links {
-                justify-content: center;
-            }
-            
-            .footer-container {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-            
-            .button-group {
-                flex-wrap: wrap;
-            }
+            body { padding: 12px; }
+            .shared-card { padding: 22px; border-radius: 18px; }
+            .nav-container { padding: 1rem; }
+            .nav-links { gap: 1rem; font-size: .85rem; }
+            .card-header-row { flex-direction: column; align-items: flex-start; }
+            .action-row { flex-direction: column; align-items: stretch; }
+            .button-group { justify-content: center; }
+            .action-btn { flex: 1 1 auto; justify-content: center; }
+            .info-bar { font-size: .82rem; }
+            .note-content { font-size: 15px; }
+            .footer-container { grid-template-columns: 1fr; text-align: center; }
+            .toast-message { left: 12px; right: 12px; bottom: 12px; }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
+
+    <!-- ==================== HEADER ==================== -->
     <header class="header">
         <div class="nav-container">
-            <div class="logo-container">
+            <a href="/" class="logo-container" style="text-decoration:none;">
                 <img src="{{ url_for('static', filename='image.png') }}"
-                     alt="OmeBox Logo"
-                     height="48"
-                     width="48"
-                     class="logo-img me-2"
-                     style="border-radius: 12px;">
+                     alt="Web Notepad Logo"
+                     height="48" width="48"
+                     class="logo-img"
+                     loading="lazy">
                 <span class="logo">Web Notepad</span>
-            </div>
-            <div class="nav-links">
+            </a>
+            <nav class="nav-links" aria-label="Main navigation">
                 <a href="/">🏠 Home</a>
                 <a href="/access">📥 Receiver</a>
                 <a href="/about">📖 About</a>
-                <a href="/privacy-policy">🛡️ Privacy Policy</a>
-            </div>
+            </nav>
         </div>
     </header>
 
-    <div class="shared-container">
-        <div class="shared-card">
-            <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
-                <h2><i class="bi bi-journal-bookmark-fill me-2"></i>WebNotepad Shared Note</h2>
-                <a href="/" class="btn btn-outline-primary"><i class="bi bi-plus-circle"></i> Create Your Own Note</a>
+    <!-- ==================== MAIN ==================== -->
+    <main class="shared-container">
+        <article class="shared-card">
+            <div class="card-header-row">
+                <h2><i class="bi bi-journal-bookmark-fill"></i> Web Notepad Shared Note</h2>
+                <a href="/" class="btn-create"><i class="bi bi-plus-circle"></i> Create Your Own Note</a>
             </div>
-            
-            <div class="alert alert-info">
-                <i class="bi bi-info-circle-fill me-2"></i>
-                <strong>Shared via code:</strong> <code style="font-size: 1.1rem; background: white; padding: 4px 8px; border-radius: 6px;">{{ share_code }}</code>
-                <span class="mx-2">•</span>
-                <i class="bi bi-eye"></i> <strong>Views:</strong> {{ note.views if note.views else 0 }}
-                <span class="mx-2">•</span>
-                <i class="bi bi-calendar"></i> <strong>Expires:</strong> {{ note.expires_at[:10] if note.expires_at else '1 hour' }}
-                <span class="mx-2">•</span>
-                <i class="bi bi-files"></i> <strong>Lines:</strong> <span id="lineCount">0</span>
+
+            <!-- Info Bar -->
+            <div class="info-bar" role="status">
+                <span><i class="bi bi-key-fill"></i> <strong>Code:</strong> <code id="shareCode">{{ share_code }}</code></span>
+                <span class="sep">•</span>
+                <span><i class="bi bi-eye-fill"></i> <strong>Views:</strong> {{ note.views if note.views else 0 }}</span>
+                <span class="sep">•</span>
+                <span><i class="bi bi-files"></i> <strong>Lines:</strong> <span id="lineCount">0</span></span>
+                <span class="sep">•</span>
+                <span><i class="bi bi-hourglass-split"></i> <strong>Expires in:</strong> <span id="expiryCountdown">—</span></span>
             </div>
-            
-            <!-- Note Content - Properly formatted -->
+
+            <!-- Note Content -->
             <div class="note-content" id="noteContent">
                 {% if note.html and note.html.strip() %}
                     {{ note.html | safe }}
                 {% elif note.content and note.content.strip() %}
-                    <pre style="white-space: pre-wrap; word-wrap: break-word; font-family: inherit; margin: 0;">{{ note.content }}</pre>
+                    <pre>{{ note.content }}</pre>
                 {% else %}
-                    <div class="text-muted text-center py-5">
-                        <i class="bi bi-file-text" style="font-size: 48px;"></i>
-                        <p class="mt-3">No content available for this shared note.</p>
+                    <div style="text-align:center; padding: 48px 20px; color: var(--text-light);">
+                        <i class="bi bi-file-text" style="font-size:52px;"></i>
+                        <p style="margin-top:14px;">No content available for this shared note.</p>
                     </div>
                 {% endif %}
             </div>
-            
-            <hr class="my-4">
-            
-            <div class="d-flex gap-3 justify-content-between align-items-center flex-wrap button-group">
-                <div class="d-flex gap-2 flex-wrap">
-                    <button class="copy-btn" id="copyLinkBtn">
-                        <i class="bi bi-link-45deg"></i> Copy Share Link
+
+            <!-- Action Row -->
+            <div class="action-row">
+                <div class="button-group">
+                    <button class="action-btn" id="copyLinkBtn" type="button" aria-label="Copy share link">
+                        <i class="bi bi-link-45deg"></i> Copy Link
                     </button>
-                    <button class="copy-btn" id="copyCodeBtn" style="background:#28a745;">
+                    <button class="action-btn green" id="copyCodeBtn" type="button" aria-label="Copy 6-digit code">
                         <i class="bi bi-grid-3x3-gap-fill"></i> Copy Code
                     </button>
-                    <button class="copy-btn" id="copyContentBtn" style="background:#17a2b8;">
-                        <i class="bi bi-clipboard-check"></i> Copy Content (Formatted)
+                    <button class="action-btn cyan" id="copyContentBtn" type="button" aria-label="Copy note content">
+                        <i class="bi bi-clipboard-check"></i> Copy Content
                     </button>
-                    <button class="download-btn" id="downloadPDFBtn" style="background:#dc3545;">
+                    <button class="action-btn red" id="downloadPDFBtn" type="button" aria-label="Download as PDF">
                         <i class="bi bi-file-pdf"></i> Download PDF
                     </button>
-                    <button class="download-btn" id="downloadTxtBtn" style="background:#6c757d;">
+                    <button class="action-btn gray" id="downloadTxtBtn" type="button" aria-label="Download as text file">
                         <i class="bi bi-file-text"></i> Download TXT
                     </button>
                 </div>
-                <div class="text-muted small">
-                    <i class="bi bi-calendar-check"></i> Created: {{ note.created_at[:10] if note.created_at else 'Unknown' }}
-                    <span class="mx-2">•</span>
-                    <i class="bi bi-hourglass-split"></i> Expires in: <span id="expiryCountdown"></span>
+
+                <div class="meta-info">
+                    <i class="bi bi-calendar-check"></i>
+                    Created: {{ note.created_at[:10] if note.created_at else 'Unknown' }}
                 </div>
             </div>
-        </div>
-    </div>
+        </article>
+    </main>
 
-    <!-- Footer -->
+    <!-- ==================== FOOTER ==================== -->
     <footer class="footer">
         <div class="footer-container">
             <div class="footer-section">
@@ -408,7 +522,7 @@
                 <ul>
                     <li><a href="/">Home</a></li>
                     <li><a href="/access">Receiver</a></li>
-                    <li><a href="/">Web</a></li>
+                    <li><a href="/about">About</a></li>
                 </ul>
             </div>
             <div class="footer-section">
@@ -420,498 +534,358 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2024 Web Notepad - Best Online Notepad Free No Login | All notes expire in 1 hour</p>
+            <p>&copy; 2026 Web Notepad — Best Online Notepad Free No Login | All notes expire in 1 hour</p>
         </div>
     </footer>
 
-    <!-- Modals for About and Privacy Policy -->
-    <div id="aboutModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:2000; align-items:center; justify-content:center;">
-        <div style="background:white; max-width:500px; margin:20px; padding:30px; border-radius:15px; position:relative;">
-            <button onclick="closeModal('aboutModal')" style="position:absolute; top:15px; right:15px; background:none; border:none; font-size:24px; cursor:pointer;">&times;</button>
-            <h2>About Web Notepad</h2>
-            <p style="margin-top:20px; line-height:1.6;">Web Notepad is the best online notepad free no login required. Share your notes instantly with a secure 6-digit code. Perfect for quick notes, temporary messages, and secure sharing.</p>
-            <p style="margin-top:15px; line-height:1.6;">✨ Features:</p>
-            <ul style="margin-top:10px; margin-left:20px;">
+    <!-- ==================== ABOUT MODAL ==================== -->
+    <div id="aboutModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="aboutTitle">
+        <div class="modal-box">
+            <button class="modal-close" data-close="aboutModal" aria-label="Close">&times;</button>
+            <h2 id="aboutTitle">About Web Notepad</h2>
+            <p>Web Notepad is the best online notepad free no login required. Share your notes instantly with a secure 6-digit code. Perfect for quick notes, temporary messages, and secure sharing.</p>
+            <h3>✨ Features</h3>
+            <ul>
                 <li>No registration needed</li>
                 <li>6-digit code access</li>
                 <li>1-hour automatic expiry</li>
                 <li>Fast and secure</li>
                 <li>Mobile responsive</li>
-                <li>PDF & TXT download support</li>
+                <li>PDF &amp; TXT download support</li>
             </ul>
-            <button onclick="closeModal('aboutModal')" style="margin-top:20px; padding:10px 20px; background:#667eea; color:white; border:none; border-radius:8px; cursor:pointer;">Close</button>
+            <button class="btn-modal-close" data-close="aboutModal">Close</button>
         </div>
     </div>
 
-    <div id="privacyModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:2000; align-items:center; justify-content:center;">
-        <div style="background:white; max-width:500px; margin:20px; padding:30px; border-radius:15px; position:relative; max-height:80vh; overflow-y:auto;">
-            <button onclick="closeModal('privacyModal')" style="position:absolute; top:15px; right:15px; background:none; border:none; font-size:24px; cursor:pointer;">&times;</button>
-            <h2>Privacy Policy</h2>
-            <p style="margin-top:20px; line-height:1.6;"><strong>Last Updated:</strong> December 2024</p>
-            <p style="margin-top:15px; line-height:1.6;">At Web Notepad, we take your privacy seriously. This privacy policy explains how we handle your data.</p>
-            
-            <h3 style="margin-top:20px;">1. Data Collection</h3>
+    <!-- ==================== PRIVACY MODAL ==================== -->
+    <div id="privacyModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="privacyTitle">
+        <div class="modal-box">
+            <button class="modal-close" data-close="privacyModal" aria-label="Close">&times;</button>
+            <h2 id="privacyTitle">Privacy Policy</h2>
+            <p><strong>Last Updated:</strong> December 2024</p>
+            <p>At Web Notepad, we take your privacy seriously. This policy explains how we handle your data.</p>
+            <h3>1. Data Collection</h3>
             <p>We do not collect any personal information. All notes are stored temporarily and expire after 1 hour.</p>
-            
-            <h3 style="margin-top:15px;">2. Data Storage</h3>
-            <p>Notes are stored locally and automatically deleted after 1 hour. No permanent storage of your content.</p>
-            
-            <h3 style="margin-top:15px;">3. Cookies</h3>
+            <h3>2. Data Storage</h3>
+            <p>Notes are stored temporarily and automatically deleted after 1 hour. No permanent storage of your content.</p>
+            <h3>3. Cookies</h3>
             <p>We use only essential cookies for functionality. No tracking cookies are used.</p>
-            
-            <h3 style="margin-top:15px;">4. Third Parties</h3>
+            <h3>4. Third Parties</h3>
             <p>We do not share any data with third parties.</p>
-            
-            <h3 style="margin-top:15px;">5. Your Rights</h3>
+            <h3>5. Your Rights</h3>
             <p>You have full control over your notes. Delete them anytime or let them expire automatically.</p>
-            
-            <button onclick="closeModal('privacyModal')" style="margin-top:20px; padding:10px 20px; background:#667eea; color:white; border:none; border-radius:8px; cursor:pointer;">Close</button>
+            <button class="btn-modal-close" data-close="privacyModal">Close</button>
         </div>
     </div>
-    
+
+    <!-- ==================== SCRIPTS ==================== -->
     <script>
-        // Get note content with proper formatting preservation
-        function getFormattedContent() {
-            const noteContentDiv = document.getElementById('noteContent');
-            let contentText = '';
-            
-            // Check if there's a pre tag (plain text)
-            const preElement = noteContentDiv.querySelector('pre');
-            if (preElement) {
-                // Preserve exact formatting including line breaks and spaces
-                contentText = preElement.innerText || preElement.textContent;
-            } else {
-                // For HTML content, get text while preserving line breaks
-                contentText = noteContentDiv.innerText || noteContentDiv.textContent;
-            }
-            
-            return contentText;
+    (function () {
+        'use strict';
+
+        // ---------- Safe server-data injection ----------
+        const SHARE_CODE  = {{ share_code | tojson }};
+        const EXPIRES_AT  = {{ (note.expires_at or '') | tojson }};
+        const CREATED_AT  = {{ (note.created_at or '') | tojson }};
+        const VIEWS       = {{ (note.views or 0) | tojson }};
+
+        const noteContentDiv = document.getElementById('noteContent');
+        const lineCountEl    = document.getElementById('lineCount');
+        const countdownEl    = document.getElementById('expiryCountdown');
+
+        // ---------- Sanitize any HTML content (XSS protection) ----------
+        if (window.DOMPurify && noteContentDiv) {
+            noteContentDiv.innerHTML = DOMPurify.sanitize(noteContentDiv.innerHTML, {
+                ALLOWED_TAGS: ['p','br','strong','em','u','s','h1','h2','h3','h4','h5','h6',
+                              'ul','ol','li','blockquote','code','pre','a','img','span','div',
+                              'hr','table','thead','tbody','tr','td','th'],
+                ALLOWED_ATTR: ['href','src','alt','title','target','rel','class','style'],
+                ALLOW_DATA_ATTR: false
+            });
         }
-        
-        // Count lines in content
+
+        // ---------- Content helpers ----------
+        function getPlainText() {
+            const pre = noteContentDiv.querySelector('pre');
+            if (pre) return pre.innerText || pre.textContent || '';
+            return noteContentDiv.innerText || noteContentDiv.textContent || '';
+        }
+
         function countLines() {
-            const content = getFormattedContent();
-            if (!content.trim()) return 0;
-            const lines = content.split(/\r\n|\r|\n/);
-            return lines.length;
+            const text = getPlainText();
+            if (!text.trim()) return 0;
+            return text.split(/\r\n|\r|\n/).length;
         }
-        
-        // Display line count
-        document.getElementById('lineCount').innerText = countLines();
-        
-        // Function to show toast notification
+
+        function updateLineCount() {
+            if (lineCountEl) lineCountEl.textContent = countLines();
+        }
+        updateLineCount();
+
+        // ---------- Toast ----------
+        let toastTimer = null;
         function showToast(message, type = 'success') {
+            document.querySelectorAll('.toast-message').forEach(t => t.remove());
             const toast = document.createElement('div');
-            toast.className = 'toast-message';
-            toast.style.backgroundColor = type === 'success' ? '#28a745' : '#dc3545';
-            toast.innerHTML = `<i class="bi bi-${type === 'success' ? 'check-circle' : 'exclamation-circle'} me-2"></i>${message}`;
+            toast.className = 'toast-message' + (type === 'error' ? ' error' : '');
+            toast.setAttribute('role', 'status');
+            toast.innerHTML = `<i class="bi bi-${type === 'success' ? 'check-circle' : 'exclamation-circle'}-fill"></i> ${message}`;
             document.body.appendChild(toast);
-            setTimeout(() => {
-                toast.style.animation = 'slideOut 0.3s ease';
+
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
+                toast.style.animation = 'slideOut .3s ease';
                 setTimeout(() => toast.remove(), 300);
-            }, 3000);
+            }, 2800);
         }
-        
-        // Modal functions
-        function openModal(modalId) {
-            document.getElementById(modalId).style.display = 'flex';
-        }
-        
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-        }
-        
-        // Event listeners for footer links
-        const aboutLink = document.getElementById('aboutLink');
-        const privacyLink = document.getElementById('privacyLink');
-        
-        if (aboutLink) {
-            aboutLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                openModal('aboutModal');
-            });
-        }
-        
-        if (privacyLink) {
-            privacyLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                openModal('privacyModal');
-            });
-        }
-        
-        // Close modals when clicking outside
-        window.addEventListener('click', (e) => {
-            if (e.target.id === 'aboutModal') closeModal('aboutModal');
-            if (e.target.id === 'privacyModal') closeModal('privacyModal');
-        });
-        
-        // Copy share link
-        document.getElementById('copyLinkBtn').addEventListener('click', async () => {
+
+        // ---------- Clipboard (async + fallback) ----------
+        async function copyToClipboard(text) {
+            if (!text) return false;
             try {
-                await navigator.clipboard.writeText(window.location.href);
-                showToast('✅ Share link copied to clipboard!');
-            } catch (err) {
-                const textarea = document.createElement('textarea');
-                textarea.value = window.location.href;
-                document.body.appendChild(textarea);
-                textarea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textarea);
-                showToast('✅ Share link copied to clipboard!');
-            }
-        });
-        
-        // Copy share code
-        document.getElementById('copyCodeBtn').addEventListener('click', async () => {
-            const code = '{{ share_code }}';
-            try {
-                await navigator.clipboard.writeText(code);
-                showToast(`✅ Code "${code}" copied to clipboard!`);
-            } catch (err) {
-                const textarea = document.createElement('textarea');
-                textarea.value = code;
-                document.body.appendChild(textarea);
-                textarea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textarea);
-                showToast(`✅ Code "${code}" copied to clipboard!`);
-            }
-        });
-        
-        // Copy note content WITH formatting preserved
-        document.getElementById('copyContentBtn').addEventListener('click', async () => {
-            const formattedContent = getFormattedContent();
-            
-            if (formattedContent && formattedContent.trim()) {
-                try {
-                    await navigator.clipboard.writeText(formattedContent);
-                    const lineCount = countLines();
-                    showToast(`✅ Note content copied! (${lineCount} lines preserved with formatting)`);
-                } catch (err) {
-                    const textarea = document.createElement('textarea');
-                    textarea.value = formattedContent;
-                    document.body.appendChild(textarea);
-                    textarea.select();
-                    document.execCommand('copy');
-                    document.body.removeChild(textarea);
-                    const lineCount = countLines();
-                    showToast(`✅ Note content copied! (${lineCount} lines preserved with formatting)`);
+                if (navigator.clipboard && window.isSecureContext) {
+                    await navigator.clipboard.writeText(text);
+                    return true;
                 }
-            } else {
-                showToast('❌ No content to copy!', 'error');
+            } catch (_) { /* fall through */ }
+
+            // Fallback
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.focus();
+            ta.select();
+            let ok = false;
+            try { ok = document.execCommand('copy'); } catch (_) { ok = false; }
+            document.body.removeChild(ta);
+            return ok;
+        }
+
+        // ---------- Copy: Share link ----------
+        document.getElementById('copyLinkBtn').addEventListener('click', async () => {
+            const ok = await copyToClipboard(window.location.href);
+            showToast(ok ? '✅ Share link copied!' : '❌ Could not copy link.', ok ? 'success' : 'error');
+        });
+
+        // ---------- Copy: 6-digit code ----------
+        document.getElementById('copyCodeBtn').addEventListener('click', async () => {
+            const ok = await copyToClipboard(SHARE_CODE);
+            showToast(ok ? `✅ Code "${SHARE_CODE}" copied!` : '❌ Could not copy code.', ok ? 'success' : 'error');
+        });
+
+        // ---------- Copy: content (rich HTML + plain text) ----------
+        document.getElementById('copyContentBtn').addEventListener('click', async () => {
+            const plain = getPlainText();
+            if (!plain.trim()) {
+                showToast('❌ No content to copy.', 'error');
+                return;
+            }
+            const lines = countLines();
+
+            // Try to copy as rich HTML for better fidelity in email/docs
+            try {
+                if (navigator.clipboard && window.ClipboardItem && window.isSecureContext) {
+                    const htmlBlob = new Blob([noteContentDiv.innerHTML], { type: 'text/html' });
+                    const textBlob = new Blob([plain], { type: 'text/plain' });
+                    await navigator.clipboard.write([
+                        new ClipboardItem({ 'text/html': htmlBlob, 'text/plain': textBlob })
+                    ]);
+                    showToast(`✅ Copied ${lines} line(s) with formatting.`);
+                    return;
+                }
+            } catch (_) { /* fall through to plain copy */ }
+
+            const ok = await copyToClipboard(plain);
+            showToast(ok ? `✅ Copied ${lines} line(s).` : '❌ Copy failed.', ok ? 'success' : 'error');
+        });
+
+        // ---------- Download: TXT ----------
+        document.getElementById('downloadTxtBtn').addEventListener('click', () => {
+            const content = getPlainText();
+            if (!content.trim()) { showToast('❌ No content to download.', 'error'); return; }
+
+            const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+            const url  = URL.createObjectURL(blob);
+            const a    = document.createElement('a');
+            a.href = url;
+            a.download = `webnotepad_note_${SHARE_CODE}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            showToast(`✅ TXT downloaded (${countLines()} lines).`);
+        });
+
+        // ---------- Download: PDF (print via hidden iframe, no popup) ----------
+        document.getElementById('downloadPDFBtn').addEventListener('click', () => {
+            const btn = document.getElementById('downloadPDFBtn');
+            const original = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading-spinner"></span> Preparing…';
+
+            try {
+                const contentHTML = noteContentDiv.innerHTML;
+                const now = new Date().toLocaleString();
+
+                const printDoc = `<!DOCTYPE html>
+                <html><head><meta charset="UTF-8"><title>Web Notepad – ${SHARE_CODE}</title>
+                <style>
+                    body { font-family: Arial, Helvetica, sans-serif; line-height: 1.6; padding: 40px; color: #333; }
+                    .header { text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid #667eea; }
+                    .header h1 { color: #667eea; margin: 0 0 10px; font-size: 22px; }
+                    .header p { margin: 4px 0; color: #666; font-size: 12px; }
+                    .content { margin: 30px 0; word-wrap: break-word; white-space: pre-wrap; font-size: 13px; }
+                    .content pre { background: #f5f5f5; padding: 14px; border-radius: 8px;
+                                   font-family: 'Courier New', monospace; white-space: pre-wrap;
+                                   word-wrap: break-word; font-size: 12px; }
+                    .content img { max-width: 100%; height: auto; }
+                    .footer { text-align: center; margin-top: 30px; padding-top: 18px;
+                              border-top: 1px solid #ddd; font-size: 10px; color: #999; }
+                    @media print { body { padding: 20px; } }
+                </style></head>
+                <body>
+                    <div class="header">
+                        <h1>Web Notepad – Shared Note</h1>
+                        <p><strong>Share Code:</strong> ${SHARE_CODE}</p>
+                        <p><strong>Created:</strong> ${CREATED_AT || 'Unknown'} &nbsp;•&nbsp; <strong>Views:</strong> ${VIEWS}</p>
+                        <p><strong>Downloaded:</strong> ${now}</p>
+                    </div>
+                    <div class="content">${contentHTML}</div>
+                    <div class="footer">
+                        <p>Generated by Web Notepad — Best Online Notepad Free No Login</p>
+                        <p>Note expires 1 hour after creation</p>
+                    </div>
+                </body></html>`;
+
+                // Use a hidden iframe to avoid popup blockers
+                const iframe = document.createElement('iframe');
+                iframe.style.position = 'fixed';
+                iframe.style.right = '0';
+                iframe.style.bottom = '0';
+                iframe.style.width = '0';
+                iframe.style.height = '0';
+                iframe.style.border = '0';
+                document.body.appendChild(iframe);
+
+                const idoc = iframe.contentWindow.document;
+                idoc.open();
+                idoc.write(printDoc);
+                idoc.close();
+
+                // Wait a tick for images/fonts, then print
+                setTimeout(() => {
+                    try {
+                        iframe.contentWindow.focus();
+                        iframe.contentWindow.print();
+                    } catch (err) {
+                        console.error('Print failed:', err);
+                        showToast('❌ Could not open print dialog.', 'error');
+                    } finally {
+                        setTimeout(() => iframe.remove(), 1500);
+                        btn.disabled = false;
+                        btn.innerHTML = original;
+                    }
+                }, 400);
+
+                showToast('✅ Print dialog opening — choose "Save as PDF".');
+            } catch (err) {
+                console.error('PDF generation error:', err);
+                btn.disabled = false;
+                btn.innerHTML = original;
+                showToast('❌ Failed to prepare PDF.', 'error');
             }
         });
-        
-        // SIMPLE WORKING PDF DOWNLOAD - Using browser print
-        function downloadPDF() {
-            const button = document.getElementById('downloadPDFBtn');
-            const originalHTML = button.innerHTML;
-            button.innerHTML = '<span class="loading-spinner"></span> Preparing PDF...';
-            button.disabled = true;
-            
-            try {
-                // Get the note content
-                const noteContent = document.getElementById('noteContent').cloneNode(true);
-                
-                // Create a complete HTML document for printing
-                const printWindow = window.open('', '_blank');
-                const shareCode = '{{ share_code }}';
-                const createdDate = '{{ note.created_at[:10] if note.created_at else "Unknown" }}';
-                const views = {{ note.views if note.views else 0 }};
-                const now = new Date();
-                
-                printWindow.document.write(`
-                    <!DOCTYPE html>
-                    <html>
-                    <head>
-                        <title>Web Notepad - Note ${shareCode}</title>
-                        <meta charset="UTF-8">
-                        <style>
-                            body {
-                                font-family: Arial, Helvetica, sans-serif;
-                                line-height: 1.6;
-                                padding: 40px;
-                                margin: 0;
-                                color: #333;
-                            }
-                            .header {
-                                text-align: center;
-                                margin-bottom: 30px;
-                                padding-bottom: 20px;
-                                border-bottom: 2px solid #667eea;
-                            }
-                            .header h1 {
-                                color: #667eea;
-                                margin: 0 0 10px 0;
-                            }
-                            .header p {
-                                margin: 5px 0;
-                                color: #666;
-                            }
-                            .content {
-                                margin: 30px 0;
-                                word-wrap: break-word;
-                                white-space: pre-wrap;
-                            }
-                            .content pre {
-                                background: #f5f5f5;
-                                padding: 15px;
-                                border-radius: 8px;
-                                overflow-x: auto;
-                                font-family: 'Courier New', monospace;
-                                font-size: 12pt;
-                                white-space: pre-wrap;
-                                word-wrap: break-word;
-                            }
-                            .footer {
-                                text-align: center;
-                                margin-top: 30px;
-                                padding-top: 20px;
-                                border-top: 1px solid #ddd;
-                                font-size: 10pt;
-                                color: #999;
-                            }
-                            @media print {
-                                body {
-                                    padding: 20px;
-                                }
-                            }
-                        </style>
-                    </head>
-                    <body>
-                        <div class="header">
-                            <h1>Web Notepad Shared Note</h1>
-                            <p><strong>Share Code:</strong> ${shareCode}</p>
-                            <p><strong>Created:</strong> ${createdDate} | <strong>Views:</strong> ${views}</p>
-                            <p><strong>Downloaded:</strong> ${now.toLocaleString()}</p>
-                        </div>
-                        <div class="content">
-                            ${noteContent.innerHTML}
-                        </div>
-                        <div class="footer">
-                            <p>Generated by Web Notepad - Best Online Notepad Free No Login</p>
-                            <p>Note expires in 1 hour from creation</p>
-                        </div>
-                    </body>
-                    </html>
-                `);
-                
-                printWindow.document.close();
-                
-                // Wait for content to load then print
-                setTimeout(() => {
-                    printWindow.print();
-                    button.innerHTML = originalHTML;
-                    button.disabled = false;
-                    showToast('✅ PDF generated! Use "Save as PDF" in the print dialog.');
-                    // Close the window after print dialog is closed (user can close manually)
-                    setTimeout(() => {
-                        printWindow.close();
-                    }, 1000);
-                }, 500);
-                
-            } catch (error) {
-                console.error('PDF generation error:', error);
-                button.innerHTML = originalHTML;
-                button.disabled = false;
-                showToast('❌ Failed to generate PDF', 'error');
-            }
-        }
-        
-        // Alternative PDF download using data URL (no popup)
-        function downloadPDFDirect() {
-            const button = document.getElementById('downloadPDFBtn');
-            const originalHTML = button.innerHTML;
-            button.innerHTML = '<span class="loading-spinner"></span> Generating PDF...';
-            button.disabled = true;
-            
-            try {
-                const noteContent = document.getElementById('noteContent').cloneNode(true);
-                const shareCode = '{{ share_code }}';
-                const createdDate = '{{ note.created_at[:10] if note.created_at else "Unknown" }}';
-                const views = {{ note.views if note.views else 0 }};
-                const now = new Date();
-                
-                const htmlContent = `
-                    <!DOCTYPE html>
-                    <html>
-                    <head>
-                        <title>Web Notepad - Note ${shareCode}</title>
-                        <meta charset="UTF-8">
-                        <style>
-                            body {
-                                font-family: Arial, Helvetica, sans-serif;
-                                line-height: 1.6;
-                                padding: 40px;
-                                margin: 0;
-                                color: #333;
-                            }
-                            .header {
-                                text-align: center;
-                                margin-bottom: 30px;
-                                padding-bottom: 20px;
-                                border-bottom: 2px solid #667eea;
-                            }
-                            .header h1 {
-                                color: #667eea;
-                                margin: 0 0 10px 0;
-                            }
-                            .content pre {
-                                background: #f5f5f5;
-                                padding: 15px;
-                                border-radius: 8px;
-                                overflow-x: auto;
-                                font-family: 'Courier New', monospace;
-                                white-space: pre-wrap;
-                                word-wrap: break-word;
-                            }
-                            .footer {
-                                text-align: center;
-                                margin-top: 30px;
-                                padding-top: 20px;
-                                border-top: 1px solid #ddd;
-                                font-size: 10pt;
-                                color: #999;
-                            }
-                        </style>
-                    </head>
-                    <body>
-                        <div class="header">
-                            <h1>Web Notepad Shared Note</h1>
-                            <p><strong>Share Code:</strong> ${shareCode}</p>
-                            <p><strong>Created:</strong> ${createdDate} | <strong>Views:</strong> ${views}</p>
-                            <p><strong>Downloaded:</strong> ${now.toLocaleString()}</p>
-                        </div>
-                        <div class="content">
-                            ${noteContent.innerHTML}
-                        </div>
-                        <div class="footer">
-                            <p>Generated by Web Notepad - Best Online Notepad Free No Login</p>
-                        </div>
-                    </body>
-                    </html>
-                `;
-                
-                // Create a blob and download
-                const blob = new Blob([htmlContent], { type: 'application/pdf' });
-                // Note: This creates an HTML file, not PDF. For proper PDF, use print method above.
-                // This is a fallback that saves as HTML which can be printed to PDF
-                const link = document.createElement('a');
-                const url = URL.createObjectURL(blob);
-                link.href = url;
-                link.download = `webnotepad_note_${shareCode}.html`;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                URL.revokeObjectURL(url);
-                
-                showToast('✅ HTML saved! Open and press Ctrl+P to save as PDF.');
-            } catch (error) {
-                console.error('Error:', error);
-                showToast('❌ Failed to generate', 'error');
-            } finally {
-                button.innerHTML = originalHTML;
-                button.disabled = false;
-            }
-        }
-        
-        // Download as TXT with proper formatting
-        function downloadTXT() {
-            const content = getFormattedContent();
-            if (!content.trim()) {
-                showToast('❌ No content to download!', 'error');
-                return;
-            }
-            
-            const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
-            const link = document.createElement('a');
-            const url = URL.createObjectURL(blob);
-            link.href = url;
-            link.download = `webnotepad_note_{{ share_code }}.txt`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(url);
-            
-            const lineCount = countLines();
-            showToast(`✅ TXT file downloaded! (${lineCount} lines preserved)`);
-        }
-        
-        // PDF download (using print method - most reliable)
-        document.getElementById('downloadPDFBtn').addEventListener('click', downloadPDF);
-        
-        // TXT download
-        document.getElementById('downloadTxtBtn').addEventListener('click', downloadTXT);
-        
-        // Countdown timer for expiry
+
+        // ---------- Countdown ----------
         function updateCountdown() {
-            const expiresAt = '{{ note.expires_at }}';
-            if (!expiresAt || expiresAt === 'None') {
-                document.getElementById('expiryCountdown').innerText = '1 hour';
-                return;
-            }
-            
-            const expiryDate = new Date(expiresAt);
-            const now = new Date();
-            const diff = expiryDate - now;
-            
-            if (diff <= 0) {
-                document.getElementById('expiryCountdown').innerText = 'Expired';
-                return;
-            }
-            
-            const hours = Math.floor(diff / (1000 * 60 * 60));
-            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-            
-            if (hours > 0) {
-                document.getElementById('expiryCountdown').innerText = `${hours}h ${minutes}m ${seconds}s`;
-            } else if (minutes > 0) {
-                document.getElementById('expiryCountdown').innerText = `${minutes}m ${seconds}s`;
-            } else {
-                document.getElementById('expiryCountdown').innerText = `${seconds}s`;
-            }
+            if (!EXPIRES_AT) { countdownEl.textContent = '1 hour'; return; }
+            const diff = new Date(EXPIRES_AT) - new Date();
+            if (diff <= 0) { countdownEl.textContent = 'Expired'; return; }
+            const h = Math.floor(diff / 3.6e6);
+            const m = Math.floor((diff % 3.6e6) / 6e4);
+            const s = Math.floor((diff % 6e4) / 1000);
+            countdownEl.textContent = h > 0 ? `${h}h ${m}m ${s}s`
+                                   : m > 0 ? `${m}m ${s}s`
+                                           : `${s}s`;
         }
-        
-        // Update countdown every second
         updateCountdown();
         setInterval(updateCountdown, 1000);
-        
-        // Track view
-        async function trackView() {
-            const shareCode = '{{ share_code }}';
-            try {
-                await fetch(`/api/note/${shareCode}`, {
-                    method: 'GET',
-                    headers: { 'Content-Type': 'application/json' }
-                });
-            } catch (err) {
-                console.log('Analytics tracking failed:', err);
-            }
+
+        // ---------- Modals (unified + ESC + backdrop + focus) ----------
+        const modalTriggers = {
+            aboutLink:   'aboutModal',
+            privacyLink: 'privacyModal'
+        };
+        Object.entries(modalTriggers).forEach(([linkId, modalId]) => {
+            const el = document.getElementById(linkId);
+            if (el) el.addEventListener('click', e => { e.preventDefault(); openModal(modalId); });
+        });
+
+        function openModal(id) {
+            const modal = document.getElementById(id);
+            if (!modal) return;
+            modal.classList.add('active');
+            const focusable = modal.querySelector('button, [href], input, [tabindex]:not([tabindex="-1"])');
+            if (focusable) focusable.focus();
         }
-        
-        trackView();
-        
-        // Keyboard shortcuts
-        document.addEventListener('keydown', (e) => {
-            if ((e.ctrlKey || e.metaKey) && e.key === 'c') {
-                const selection = window.getSelection();
-                if (!selection.toString()) {
-                    e.preventDefault();
-                    document.getElementById('copyContentBtn').click();
-                }
-            }
-            if ((e.ctrlKey || e.metaKey) && e.key === 's') {
-                e.preventDefault();
-                downloadTXT();
-            }
-            if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
-                e.preventDefault();
-                downloadPDF();
+        function closeModal(id) {
+            const modal = document.getElementById(id);
+            if (!modal) return;
+            modal.classList.remove('active');
+        }
+        window.openModal = openModal;
+        window.closeModal = closeModal;
+
+        document.querySelectorAll('[data-close]').forEach(btn => {
+            btn.addEventListener('click', () => closeModal(btn.getAttribute('data-close')));
+        });
+        document.querySelectorAll('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', e => {
+                if (e.target === overlay) closeModal(overlay.id);
+            });
+        });
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.modal-overlay.active').forEach(m => m.classList.remove('active'));
             }
         });
-        
-        console.log('Shared note loaded successfully! Total lines:', countLines());
+
+        // ---------- Keyboard shortcuts (scoped, non-hijacking) ----------
+        document.addEventListener('keydown', e => {
+            const mod = e.ctrlKey || e.metaKey;
+            if (!mod) return;
+            // Only intercept when user is NOT editing an input/textarea
+            const tag = (e.target.tagName || '').toLowerCase();
+            if (tag === 'input' || tag === 'textarea' || e.target.isContentEditable) return;
+
+            if (e.key === 's') { e.preventDefault(); document.getElementById('downloadTxtBtn').click(); }
+            else if (e.key === 'p') { e.preventDefault(); document.getElementById('downloadPDFBtn').click(); }
+            else if (e.key === 'c' && !window.getSelection().toString()) {
+                e.preventDefault();
+                document.getElementById('copyContentBtn').click();
+            }
+        });
+
+        // ---------- View tracking (fire-and-forget, no double-count) ----------
+        let viewTracked = false;
+        function trackView() {
+            if (viewTracked) return;
+            viewTracked = true;
+            fetch(`/api/note/${encodeURIComponent(SHARE_CODE)}`, {
+                method: 'GET',
+                headers: { 'Accept': 'application/json' },
+                keepalive: true
+            }).catch(() => { /* silently ignore */ });
+        }
+        // Delay tracking slightly so it doesn't compete with initial render
+        setTimeout(trackView, 600);
+
+        // ---------- Log ----------
+        console.log('%c✅ Shared note loaded', 'color:#10b981;font-weight:600;', 'Lines:', countLines());
+    })();
     </script>
 </body>
 </html>
