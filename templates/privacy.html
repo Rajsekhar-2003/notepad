@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Privacy Policy – Web Online Notepad | Zero Tracking, No Login, Secure</title>
+    <meta name="description" content="Privacy policy of Web Online Notepad: zero tracking, no data collection, no login required. Your notes stay private, auto-save only on your device. Created by Rajsekhar Maity.">
+    <meta name="keywords" content="privacy policy, online notepad privacy, zero tracking notepad, no login privacy, secure online text editor, web notepad privacy, data protection, Rajsekhar Maity">
+    <meta name="author" content="Rajsekhar Maity">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://www.webnotepad.online/privacy-policy">
+
+     <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='image.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='image.png') }}">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='image.png') }}">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Privacy Policy – Web Online Notepad | Zero Tracking, Your Data Stays Yours">
+    <meta property="og:description" content="We collect nothing. No login, no analytics, no cookies for tracking. Read our full privacy commitment.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.webnotepad.online/privacy-policy">
+    <meta property="og:image" content="https://www.webnotepad.online/privacy-og.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Privacy Policy – Web Online Notepad">
+    <meta name="twitter:description" content="Absolute privacy: no login, zero tracking, no data collection. Your notes never leave your browser unless you share.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(145deg, #f8fafc 0%, #eef2f7 100%);
+            color: #0f172a;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+        }
+
+        .badge-dev {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(37, 99, 235, 0.1);
+            backdrop-filter: blur(2px);
+            padding: 0.4rem 1rem;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #1e40af;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(59,130,246,0.2);
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #0f172a, #2563eb);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .last-updated {
+            color: #475569;
+            margin-bottom: 2rem;
+            border-left: 3px solid #3b82f6;
+            padding-left: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .policy-card {
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(4px);
+            border-radius: 2rem;
+            padding: 2rem;
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.08);
+            border: 1px solid rgba(255,255,255,0.6);
+            margin: 1.5rem 0;
+        }
+
+        .policy-section {
+            margin-bottom: 2rem;
+            scroll-margin-top: 1rem;
+        }
+
+        .policy-section h2 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            color: #1e293b;
+            border-left: 4px solid #2563eb;
+            padding-left: 1rem;
+        }
+
+        .policy-section h2 i {
+            color: #2563eb;
+            font-size: 1.5rem;
+        }
+
+        .policy-section h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 1rem 0 0.5rem;
+            color: #0f172a;
+        }
+
+        .policy-section p, .policy-section li {
+            color: #334155;
+            margin-bottom: 0.75rem;
+        }
+
+        .policy-section ul, .policy-section ol {
+            margin-left: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .policy-section li {
+            margin-bottom: 0.4rem;
+        }
+
+        .highlight-box {
+            background: #e6f0ff;
+            border-radius: 1.2rem;
+            padding: 1.2rem;
+            margin: 1.5rem 0;
+            border-left: 5px solid #2563eb;
+        }
+
+        .highlight-box i {
+            font-size: 1.4rem;
+            color: #2563eb;
+            margin-right: 0.6rem;
+        }
+
+        .dev-note {
+            background: #f1f5f9;
+            border-radius: 1.5rem;
+            padding: 1.2rem;
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        footer {
+            margin-top: 3rem;
+            text-align: center;
+            border-top: 1px solid #cbd5e1;
+            padding-top: 2rem;
+            font-size: 0.85rem;
+            color: #475569;
+        }
+
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #2563eb;
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.2s;
+            margin-top: 1rem;
+        }
+
+        .btn-back:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 680px) {
+            h1 { font-size: 1.9rem; }
+            .policy-card { padding: 1.2rem; }
+            .container { padding: 1.2rem; }
+        }
+        /* Header Styles */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #667eea;
+        }
+
+        .nav-links a.active {
+            color: #667eea;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo">📝 Web Notepad</div>
+            <div class="nav-links">
+                <a href="/">🏠 Home</a>
+                <a href="/access" class="active">📥 Receiver</a>
+                <a href="/about">📖 About</a>
+            </div>
+        </div>
+    </header>
+
+<div class="container">
+    <div class="badge-dev">
+        <i class="fas fa-shield-alt"></i> <span>Developer: Rajsekhar Maity</span> <i class="fas fa-lock" style="color:#22c55e;"></i>
+    </div>
+    <h1><i class="fas fa-file-contract"></i> Privacy Policy</h1>
+    <div class="last-updated">
+        <i class="far fa-calendar-alt"></i> Last updated: April 18, 2026 | Effective immediately
+    </div>
+
+    <div class="policy-card">
+        <div class="highlight-box">
+            <i class="fas fa-eye-slash"></i> <strong>Zero Tracking • No Login • Absolute Privacy</strong><br>
+            Web Online Notepad is designed from the ground up to respect your privacy. We do NOT collect, store, or share any personal information. Your notes remain yours — always.
+        </div>
+
+        <div class="policy-section" id="intro">
+            <h2><i class="fas fa-info-circle"></i> 1. Introduction</h2>
+            <p>Welcome to <strong>Web Online Notepad</strong> (the "best free notepad without login"). This privacy policy explains how we handle your data when you use our online text editor, note-taking website, and sharing features (QR code & 6-digit access code).</p>
+            <p><strong>Key principle:</strong> We believe in privacy by default. You do not need to create an account, provide an email, or submit any personal details. Our service works 100% locally in your browser with zero tracking.</p>
+        </div>
+
+        <div class="policy-section" id="data-collection">
+            <h2><i class="fas fa-database"></i> 2. What Data We Collect</h2>
+            <p><strong>We collect absolutely no personal data.</strong> Unlike traditional notepad apps or online tools, we do not:</p>
+            <ul>
+                <li><i class="fas fa-times-circle" style="color:#ef4444;"></i> Require login or registration</li>
+                <li><i class="fas fa-times-circle" style="color:#ef4444;"></i> Store your notes on our servers</li>
+                <li><i class="fas fa-times-circle" style="color:#ef4444;"></i> Use tracking cookies, analytics (Google Analytics, etc.), or fingerprinting</li>
+                <li><i class="fas fa-times-circle" style="color:#ef4444;"></i> Collect IP addresses, browser data, or device information</li>
+                <li><i class="fas fa-times-circle" style="color:#ef4444;"></i> Share or sell any information with third parties</li>
+            </ul>
+            <p><strong>What about auto-save?</strong> The auto-save feature stores your note <strong>only on your own device</strong> using your browser's localStorage. This is a local storage mechanism — we never have access to that data. You can clear it anytime by clearing your browser data.</p>
+        </div>
+
+        <div class="policy-section" id="sharing">
+            <h2><i class="fas fa-share-alt"></i> 3. QR Code & 6-Digit Code Sharing</h2>
+            <p>Our sharing features (QR code and 6-digit access code) are designed with privacy in mind:</p>
+            <ul>
+                <li><strong>No central server storage:</strong> The shared note content is not uploaded to our servers. In the demo or actual implementation, notes are stored temporarily in your browser's memory/localStorage and never transmitted to us.</li>
+                <li><strong>6-digit code:</strong> This is generated client-side. No database records your codes or notes. If you share a code, the recipient's browser directly reads the note from your local storage simulation — or in a fully offline-capable version, via peer mechanisms.</li>
+                <li><strong>QR code:</strong> Encodes note preview information locally. We do not track scans.</li>
+            </ul>
+            <p><strong>Important:</strong> When you share a note via a 6-digit code, you are responsible for securely sharing that code. We never log or store the note content or the code. For true end-to-end privacy, treat the access code like a key.</p>
+        </div>
+
+        <div class="policy-section" id="local-storage">
+            <h2><i class="fas fa-save"></i> 4. Local Storage & Auto-Save</h2>
+            <p>Web Online Notepad uses your browser's <strong>localStorage</strong> to provide auto-save functionality. This means:</p>
+            <ul>
+                <li>Your note is saved locally on your computer, phone, or tablet.</li>
+                <li>We never read, access, or transmit your saved notes to any external server.</li>
+                <li>You can manually delete saved notes by clearing your browser's site data or using the "clear" option (if implemented).</li>
+                <li>No cookies are used for tracking — only essential local storage for your convenience.</li>
+            </ul>
+            <div class="highlight-box" style="background:#fef9e3; border-left-color:#eab308;">
+                <i class="fas fa-info-circle"></i> <strong>Your control:</strong> You can disable localStorage via browser settings, but auto-save will stop working. The core editing experience remains functional.
+            </div>
+        </div>
+
+        <div class="policy-section" id="third-party">
+            <h2><i class="fas fa-plug"></i> 5. Third-Party Services & Links</h2>
+            <p>Our notepad does not integrate any external analytics, advertising networks, or tracking scripts. However, the download feature (PDF, Word, HTML, MD) uses client-side libraries (html2pdf, FileSaver) that run entirely in your browser. These libraries do not send data externally.</p>
+            <p>We do not include social media buttons, tracking pixels, or any form of external content that could compromise your privacy.</p>
+            <p><strong>Fonts & Icons:</strong> We use Google Fonts and FontAwesome CDN. Those CDN providers may log standard HTTP requests (IP, user agent) according to their own policies. However, we do not control or have access to that data. For maximum privacy, you can use browser extensions to block CDN requests, but the page may not render correctly.</p>
+        </div>
+
+        <div class="policy-section" id="children">
+            <h2><i class="fas fa-child"></i> 6. Children's Privacy</h2>
+            <p>Our service is suitable for all ages. Since we do not collect any personal data, there is no risk of collecting information from children under 13. Parents and teachers can confidently recommend Web Online Notepad as a safe online writing pad and note-taking tool.</p>
+        </div>
+
+        <div class="policy-section" id="data-retention">
+            <h2><i class="fas fa-trash-alt"></i> 7. Data Retention & Deletion</h2>
+            <p>Because we do not store any data on our servers, there is no data retention policy required from our side. Your locally saved notes remain until you:</p>
+            <ul>
+                <li>Clear your browser cache/localStorage.</li>
+                <li>Uninstall/delete browser data manually.</li>
+                <li>Use the browser's "Clear site data" option.</li>
+            </ul>
+            <p>We cannot access or recover your notes. You are solely responsible for backing up important notes via our export options (PDF, Word, HTML, MD).</p>
+        </div>
+
+        <div class="policy-section" id="security">
+            <h2><i class="fas fa-shield-virus"></i> 8. Security Measures</h2>
+            <p>Even though we collect no data, we still prioritize security:</p>
+            <ul>
+                <li>Our website is served over HTTPS (encrypted connection) to prevent man-in-the-middle attacks.</li>
+                <li>No external scripts that could inject malicious code.</li>
+                <li>Content Security Policy (CSP) headers are used to restrict unauthorized resource loading.</li>
+                <li>We regularly update dependencies to avoid known vulnerabilities.</li>
+            </ul>
+            <p>However, no online platform is 100% immune. We recommend using updated browsers and avoiding sharing sensitive information via any online notepad if you have extreme security requirements.</p>
+        </div>
+
+        <div class="policy-section" id="changes">
+            <h2><i class="fas fa-edit"></i> 9. Changes to This Privacy Policy</h2>
+            <p>We may update this privacy policy occasionally to reflect improvements or legal requirements. Any changes will be posted on this page with an updated "Last updated" date. Since we do not collect user emails, we cannot notify you individually — please review periodically.</p>
+            <p>We will never change our core commitment: <strong>zero tracking, no login, and no data collection.</strong></p>
+        </div>
+
+        <div class="policy-section" id="contact">
+            <h2><i class="fas fa-envelope"></i> 10. Contact Information</h2>
+            <p>If you have any questions about this privacy policy or our privacy practices, you can contact the developer:</p>
+            <p><i class="fas fa-user-circle"></i> <strong>Developer:</strong> Rajsekhar Maity<br>
+            <i class="fas fa-globe"></i> <strong>Website:</strong> <a href="#" style="color:#2563eb;">https://www.webnotepad.online</a><br>
+            <i class="fas fa-envelope"></i> <strong>Privacy-related inquiries:</strong> (via contact form on our website — no personal data required)</p>
+            <p><em>Because we don't track you, we also can't identify you. But we're happy to answer general privacy questions publicly.</em></p>
+        </div>
+
+        <div class="dev-note">
+            <i class="fas fa-code"></i> Built with ❤️ by <strong>Rajsekhar Maity</strong> — Privacy-first developer. <br>
+            This online notepad is open-source friendly and auditable. No hidden trackers. No data mining.
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 1rem;">
+        <a href="#" class="btn-back" id="backToHomeBtn"><i class="fas fa-arrow-left"></i> Back to Notepad</a>
+        <a href="#" class="btn-back" style="background:#334155; margin-left: 0.8rem;" id="aboutLinkBtn"><i class="fas fa-info-circle"></i> About Us</a>
+    </div>
+
+    <footer>
+        <p>© 2026 Web Online Notepad — Zero Tracking, No Login, Absolute Privacy. Developer: Rajsekhar Maity.</p>
+        <p style="margin-top: 0.5rem; font-size: 0.75rem;"><i class="fas fa-lock"></i> Your notes never leave your device. Auto-save uses localStorage only. No third-party analytics.</p>
+        <p><i class="fas fa-file-alt"></i> Keywords: privacy policy, online notepad privacy, zero tracking, no login notepad, secure online text editor, data protection, web notepad confidential</p>
+    </footer>
+</div>
+
+<script>
+    // Simple demo to handle "Back to Notepad" and "About Us" navigation simulation
+    document.getElementById('backToHomeBtn').addEventListener('click', function(e) {
+        e.preventDefault();
+        alert('🌐 In the live version, this would redirect to the main notepad page.\n\nYour notes are always private and never logged.');
+        // You can replace with actual URL when deploying:
+        // window.location.href = '/';
+    });
+    document.getElementById('aboutLinkBtn').addEventListener('click', function(e) {
+        e.preventDefault();
+        alert('📄 About Us page would open here.\n\nWeb Online Notepad: free notepad without login, auto-save, share via QR/6-digit code.');
+        // window.location.href = '/about.html';
+    });
+    // Optional: display a small console log confirming no tracking
+    console.log("Web Online Notepad - Privacy Policy Page: No tracking scripts, no analytics, full privacy respected. Developed by Rajsekhar Maity.");
+</script>
+</body>
+</html>
